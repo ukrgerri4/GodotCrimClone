@@ -1,0 +1,72 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://Textures/grid.png" type="Texture" id=1]
+[ext_resource path="res://Scripts/FreeCamera.cs" type="Script" id=2]
+[ext_resource path="res://Main.cs" type="Script" id=3]
+[ext_resource path="res://Scripts/PruneArea.cs" type="Script" id=4]
+[ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Scripts/Floor.cs" type="Script" id=6]
+
+[sub_resource type="BoxShape" id=1]
+
+[sub_resource type="PlaneMesh" id=2]
+
+[sub_resource type="SpatialMaterial" id=3]
+albedo_texture = ExtResource( 1 )
+uv1_scale = Vector3( 256, 256, 256 )
+uv1_triplanar = true
+
+[sub_resource type="CylinderShape" id=4]
+
+[sub_resource type="SpatialMaterial" id=5]
+albedo_color = Color( 1, 1, 1, 0.117647 )
+distance_fade_mode = 1
+distance_fade_min_distance = 0.0
+distance_fade_max_distance = 10.0
+
+[sub_resource type="CylinderMesh" id=6]
+material = SubResource( 5 )
+
+[node name="Main" type="Spatial"]
+script = ExtResource( 3 )
+
+[node name="Floor" type="StaticBody" parent="."]
+script = ExtResource( 6 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Floor"]
+transform = Transform( 256, 0, 0, 0, 0.2, 0, 0, 0, 256, 0, -0.2, 0 )
+shape = SubResource( 1 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Floor"]
+transform = Transform( 256, 0, 0, 0, 1, 0, 0, 0, 256, 0, 0, 0 )
+mesh = SubResource( 2 )
+material/0 = SubResource( 3 )
+
+[node name="FreeCamera" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 10, 0 )
+far = 500.0
+script = ExtResource( 2 )
+
+[node name="PruneArea" type="Area" parent="."]
+input_ray_pickable = false
+script = ExtResource( 4 )
+
+[node name="CollisionShape" type="CollisionShape" parent="PruneArea"]
+transform = Transform( 10, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0, 0 )
+shape = SubResource( 4 )
+
+[node name="MeshInstance" type="MeshInstance" parent="PruneArea"]
+transform = Transform( 10, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0, 0 )
+mesh = SubResource( 6 )
+
+[node name="Player" parent="." instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
+input_ray_pickable = false
+
+[node name="Info" type="Label" parent="."]
+margin_right = 104.0
+margin_bottom = 42.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+
+[connection signal="input_event" from="Floor" to="Floor" method="_on_Floor_input_event"]
+[connection signal="body_entered" from="PruneArea" to="PruneArea" method="_on_PruneArea_body_entered"]
