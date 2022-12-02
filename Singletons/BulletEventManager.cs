@@ -3,17 +3,12 @@ using System;
 
 public class BulletEventManager : Node
 {
-  public delegate void CreateBulletEvent(Vector3 entryPoint);
+  public delegate void CreateBulletEvent(ShotEvent @event);
   private event CreateBulletEvent CreateBullet;
 
-  public override void _Ready()
+  public void AddBullet(ShotEvent @event)
   {
-    
-  }
-
-  public void AddBullet(Vector3 entryPoint)
-  {
-    CreateBullet?.Invoke(entryPoint);
+    CreateBullet?.Invoke(@event);
   }
 
   public void OnBulletAdd(CreateBulletEvent handler)

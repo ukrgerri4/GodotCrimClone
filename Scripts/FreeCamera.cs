@@ -17,7 +17,7 @@ public class FreeCamera : Camera
   public override void _Ready()
   {
     configuration = GetNode<Configuration>("/root/Configuration");
-    configuration.OnMouseCaptionChanged += (CameraModeChangedEvent @event) => 
+    configuration.OnMouseCaptionChanged += (CameraModeChangedEvent @event) =>
     {
       Current = @event.CameraMode == CameraMode.FreeView ? true : false;
     };
@@ -28,9 +28,9 @@ public class FreeCamera : Camera
 
   public override void _Input(InputEvent @event)
   {
-    if (!Current) { return; }
+    if (IsCameraMovementDisabled()) { return; }
 
-    if (Input.MouseMode.IsCuptured() && @event is InputEventMouseMotion mouseEvent)
+    if (@event is InputEventMouseMotion mouseEvent)
     {
       rotation.y -= mouseEvent.Relative.x * MOUSE_SENSITIVITY;
       rotation.x = Mathf.Clamp(rotation.x - mouseEvent.Relative.y * MOUSE_SENSITIVITY, -1.57f, 1.57f);
@@ -42,26 +42,26 @@ public class FreeCamera : Camera
 
   public override void _PhysicsProcess(float delta)
   {
-    if (!Current) { return; }
+    if (IsCameraMovementDisabled()) { return; }
 
-    if (Current && Input.MouseMode.IsCuptured())
-    {
-      var motion = new Vector3(
-          Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left"),
-          0,
-          Input.GetActionStrength("move_backward") - Input.GetActionStrength("move_forward")
-      );
+    var motion = new Vector3(
+        Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left"),
+        0,
+        Input.GetActionStrength("move_backward") - Input.GetActionStrength("move_forward")
+    );
 
-      motion = motion.Normalized();
+    motion = motion.Normalized();
 
-      velocity += MOVE_SPEED * delta * Transform.basis.Xform(motion);
-      velocity *= 0.85f;
-      Translation += velocity;
-    }
-    else
-    {
-      // Translation = new Vector3(player.Translation.x - 5, player.Translation.y + 4, player.Translation.z);
-      // LookAt(player.Translation, Vector3.Up);
-    }
+    velocity += MOVE_SPEED * delta * Transform.basis.Xform(motion);
+    velocity *= 0.85f;
+    Translation += velocity;
+
+    // Translation = new Vector3(player.Translation.x - 5, player.Translation.y + 4, player.Translation.z);
+    // LookAt(player.Translation, Vector3.Up);
+  }
+
+  private bool IsCameraMovementDisabled()
+  {
+    return !Current || !Input.MouseMode.IsCuptured();
   }
 }

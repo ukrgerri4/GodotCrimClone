@@ -3,32 +3,39 @@ using System;
 
 public class Player : KinematicBody
 {
-  private Configuration configuration;
-  private BulletEventManager bulletEventManager;
-
-  private PlayerCamera playerCamera;
-  private PackedScene bulletTemplate;
-  private Position3D bulletEntryPoint;
+  private Configuration _configuration;
+  private BulletEventManager _bulletEventManager;
+  private CursorEventManager _cursorEventManager;
+  private PlayerCamera _playerCamera;
+  private PackedScene _bulletTemplate;
+  private Position3D _bulletEntryPoint;
 
   private bool IsMouseModeVisible => Input.MouseMode == Input.MouseModeEnum.Visible;
 
   // Called when the node enters the scene tree for the first time.
   public override void _Ready()
   {
-    playerCamera = GetNode<PlayerCamera>("Camera");
-    bulletEntryPoint = GetNode<Position3D>("BulletEntryPoint");
-    bulletTemplate = GD.Load<PackedScene>("res://Scenes/Bullet.tscn");
+    _playerCamera = GetNode<PlayerCamera>("Camera");
+    _bulletEntryPoint = GetNode<Position3D>("BulletEntryPoint");
+    _bulletTemplate = GD.Load<PackedScene>("res://Scenes/Bullet.tscn");
 
-    configuration = GetNode<Configuration>("/root/Configuration");
-    bulletEventManager = GetNode<BulletEventManager>("/root/BulletEventManager");
+    _configuration = GetNode<Configuration>("/root/Configuration");
+    _bulletEventManager = GetNode<BulletEventManager>("/root/BulletEventManager");
+    _cursorEventManager = GetNode<CursorEventManager>("/root/CursorEventManager");
 
-    configuration.OnMouseCaptionChanged += (CameraModeChangedEvent @event) =>
+    _configuration.OnMouseCaptionChanged += (CameraModeChangedEvent @event) =>
     {
-      playerCamera.Current = @event.CameraMode == CameraMode.Player ? true : false;
+      _playerCamera.Current = @event.CameraMode == CameraMode.Player ? true : false;
     };
+
+    _cursorEventManager.AddPositionChangedHandler((CursorPositionChangedEvent @event) =>
+    {
+      var lookAtPosition = new Vector3(@event.Position);
+      lookAtPosition.y = Translation.y;
+      LookAt(lookAtPosition, Vector3.Up);
+    });
   }
 
-  // Called every frame. 'delta' is the elapsed time since the previous frame.
   public override void _Process(float delta)
   {
 
@@ -36,24 +43,20 @@ public class Player : KinematicBody
 
   public override void _PhysicsProcess(float delta)
   {
-    if (configuration.CameraMode == CameraMode.Player)
+    if (_configuration.IsFreeViewCameraMode && Input.MouseMode.IsVisible())
     {
-      var motion = new Vector3(
-          Input.GetActionStrength("move_forward") - Input.GetActionStrength("move_backward"),
-          0,
-          Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left")
-      );
-
-      MoveAndSlide(motion * 10);
+      MoveByKeyboard(delta);
     }
 
     if (Input.IsActionPressed("ui_accept"))
     {
-      bulletEventManager.AddBullet(bulletEntryPoint.GlobalTranslation);
-      // Bullet bullet = bulletTemplate.Instance<Bullet>();
-      // bullet.Translation = new Vector3(bulletEntryPoint.Translation);
-      // bullet.Direction = new Vector3(bulletEntryPoint.Translation);
-      // AddChild(bullet);
+      _bulletEventManager.AddBullet(
+        new ShotEvent
+        {
+          EntryPoint = _bulletEntryPoint.GlobalTranslation,
+          Direction = GlobalTranslation + _bulletEntryPoint.GlobalTranslation
+        }
+      );
     }
   }
   public override void _Input(InputEvent @event)
@@ -81,4 +84,37 @@ public class Player : KinematicBody
 
   //   MoveAndCollide(new Vector2(xAxis, zAxis) * 10);
   // }
+
+  private void MoveByKeyboard(float delta)
+  {
+    var motion = new Vector3(
+        Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left"),
+        0,
+        Input.GetActionStrength("move_backward") - Input.GetActionStrength("move_forward")
+    );
+
+    motion = motion.Normalized();
+
+    MoveAndSlide(motion * 10);
+  }
+
+  private void MoveByMouseClick()
+  {
+    // if (@event is InputEventMouseButton eventMouseButton && eventMouseButton.Pressed && eventMouseButton.ButtonIndex == 1)
+    // {
+    //     _player.LookAt(position, Vector3.Up);
+
+    //     _tween.RemoveAll();
+    //     _tween.InterpolateProperty(
+    //         _player,
+    //         "translation",
+    //         _player.Translation,
+    //         position,
+    //         _player.Translation.DistanceTo(position) / 25, 
+    //         Tween.TransitionType.Linear,
+    //         Tween.EaseType.Out
+    //     );
+    //     _tween.Start();
+    // }
+  }
 }

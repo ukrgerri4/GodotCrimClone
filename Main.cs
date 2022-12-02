@@ -52,10 +52,10 @@ public class Main : Spatial
     // sphere.MoveAndSlide(Vector3.Zero);
   }
 
-  private void PlaceBullet(Vector3 entryPoint)
+  private void PlaceBullet(ShotEvent @event)
   {
     Bullet bullet = bulletTemplate.Instance<Bullet>();
-    bullet.Translation = new Vector3(entryPoint);
+    bullet.Translation = new Vector3(@event.EntryPoint);
     bullet.Direction = new Vector3(new Vector3(1, 0, 1));
     AddChild(bullet);
   }

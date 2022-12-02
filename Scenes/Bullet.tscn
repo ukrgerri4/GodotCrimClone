@@ -7,7 +7,7 @@
 [sub_resource type="SphereMesh" id=2]
 
 [sub_resource type="SpatialMaterial" id=3]
-albedo_color = Color( 0.756863, 1, 0, 1 )
+albedo_color = Color( 0, 0, 0, 1 )
 
 [node name="Bullet" type="KinematicBody"]
 transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0 )

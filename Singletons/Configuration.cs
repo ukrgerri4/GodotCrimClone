@@ -16,6 +16,9 @@ public class Configuration : Node
     }
   }
 
+  public bool IsPlayerCameraMode => CameraMode == CameraMode.Player;
+  public bool IsFreeViewCameraMode => CameraMode == CameraMode.FreeView;
+
   public float MouseSensitivity { get; set; } = 0.002f;
 
   public override void _Ready()
