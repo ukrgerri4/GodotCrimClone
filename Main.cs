@@ -56,7 +56,7 @@ public class Main : Spatial
   {
     Bullet bullet = bulletTemplate.Instance<Bullet>();
     bullet.Translation = new Vector3(@event.EntryPoint);
-    bullet.Direction = new Vector3(new Vector3(1, 0, 1));
+    bullet.Direction = new Vector3(@event.Direction.Normalized());
     AddChild(bullet);
   }
 }

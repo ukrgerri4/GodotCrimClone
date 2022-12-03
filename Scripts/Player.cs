@@ -41,23 +41,31 @@ public class Player : KinematicBody
 
   }
 
+  private float limit = 0.2f;
   public override void _PhysicsProcess(float delta)
   {
+    limit = limit - delta;
+    if (Input.IsActionPressed("ui_accept"))
+    {
+      GD.Print(limit);
+      if (limit <= 0)
+      {
+        _bulletEventManager.AddBullet(
+          new ShotEvent
+          {
+            EntryPoint = _bulletEntryPoint.GlobalTranslation,
+            Direction = -1 * GlobalTranslation + _bulletEntryPoint.GlobalTranslation
+          }
+        );
+        limit = 0.2f;
+      }
+    }
+
     if (_configuration.IsFreeViewCameraMode && Input.MouseMode.IsVisible())
     {
       MoveByKeyboard(delta);
     }
 
-    if (Input.IsActionPressed("ui_accept"))
-    {
-      _bulletEventManager.AddBullet(
-        new ShotEvent
-        {
-          EntryPoint = _bulletEntryPoint.GlobalTranslation,
-          Direction = GlobalTranslation + _bulletEntryPoint.GlobalTranslation
-        }
-      );
-    }
   }
   public override void _Input(InputEvent @event)
   {
