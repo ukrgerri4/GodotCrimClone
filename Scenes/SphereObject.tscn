@@ -13,6 +13,7 @@ roughness = 0.5
 
 [node name="Sphere" type="KinematicBody"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
+collision_layer = 2
 input_ray_pickable = false
 script = ExtResource( 1 )
 

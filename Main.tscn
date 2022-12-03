@@ -49,6 +49,7 @@ far = 500.0
 script = ExtResource( 2 )
 
 [node name="PruneArea" type="Area" parent="."]
+collision_mask = 2
 input_ray_pickable = false
 script = ExtResource( 4 )
 

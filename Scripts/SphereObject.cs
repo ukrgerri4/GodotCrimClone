@@ -12,6 +12,6 @@ public class SphereObject : KinematicBody
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(float delta)
 	{
-		MoveAndSlide(Translation * -1);
+		MoveAndSlide(-1 * Translation * delta * 5);
 	}
 }

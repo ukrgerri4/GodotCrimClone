@@ -21,10 +21,20 @@ public class Configuration : Node
 
   public float MouseSensitivity { get; set; } = 0.002f;
 
+  public BulletConfigurations Bullets { get; set; }
+
   public override void _Ready()
   {
     Input.MouseMode = Input.MouseModeEnum.Captured;
     CameraMode = CameraMode.FreeView;
+
+    Bullets = new BulletConfigurations
+    {
+      DefaultSpeed = 30f,
+      MaxExistingTimeSec = 3f,
+      DeviationDegrees = 5,
+      DeviationRadians = Mathf.Deg2Rad(5)
+    };
   }
 
   public override void _Input(InputEvent @event)

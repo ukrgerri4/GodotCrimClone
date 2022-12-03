@@ -47,9 +47,8 @@ public class Player : KinematicBody
     limit = limit - delta;
     if (Input.IsActionPressed("ui_accept"))
     {
-      GD.Print(limit);
-      if (limit <= 0)
-      {
+      // if (limit <= 0)
+      // {
         _bulletEventManager.AddBullet(
           new ShotEvent
           {
@@ -57,8 +56,8 @@ public class Player : KinematicBody
             Direction = -1 * GlobalTranslation + _bulletEntryPoint.GlobalTranslation
           }
         );
-        limit = 0.2f;
-      }
+        // limit = 0.2f;
+      // }
     }
 
     if (_configuration.IsFreeViewCameraMode && Input.MouseMode.IsVisible())
