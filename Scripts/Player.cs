@@ -4,11 +4,12 @@ using System;
 public class Player : KinematicBody
 {
   private Configuration _configuration;
-  private BulletEventManager _bulletEventManager;
+  // private BulletEventManager _bulletEventManager;
   private CursorEventManager _cursorEventManager;
   private PlayerCamera _playerCamera;
-  private PackedScene _bulletTemplate;
-  private Position3D _bulletEntryPoint;
+  // private PackedScene _bulletTemplate;
+  // private Position3D _bulletEntryPoint;
+  private Weapon _weapon;
 
   private bool IsMouseModeVisible => Input.MouseMode == Input.MouseModeEnum.Visible;
 
@@ -16,11 +17,14 @@ public class Player : KinematicBody
   public override void _Ready()
   {
     _playerCamera = GetNode<PlayerCamera>("Camera");
-    _bulletEntryPoint = GetNode<Position3D>("BulletEntryPoint");
-    _bulletTemplate = GD.Load<PackedScene>("res://Scenes/Bullet.tscn");
+    _weapon = GD.Load<PackedScene>("res://Scenes/AutoShotgun.tscn").Instance<AutoShotgun>(); 
+    _weapon.Translation = new Vector3(0, 0, -0.25f);
+    AddChild(_weapon);
+    // _bulletEntryPoint = GetNode<Position3D>("BulletEntryPoint");
+    // _bulletTemplate = GD.Load<PackedScene>("res://Scenes/Bullet.tscn");
 
     _configuration = GetNode<Configuration>("/root/Configuration");
-    _bulletEventManager = GetNode<BulletEventManager>("/root/BulletEventManager");
+    // _bulletEventManager = GetNode<BulletEventManager>("/root/BulletEventManager");
     _cursorEventManager = GetNode<CursorEventManager>("/root/CursorEventManager");
 
     _configuration.OnMouseCaptionChanged += (CameraModeChangedEvent @event) =>
@@ -41,24 +45,24 @@ public class Player : KinematicBody
 
   }
 
-  private float limit = 0.2f;
+  // private float limit = 0.2f;
   public override void _PhysicsProcess(float delta)
   {
-    limit = limit - delta;
-    if (Input.IsActionPressed("ui_accept"))
-    {
-      // if (limit <= 0)
-      // {
-        _bulletEventManager.AddBullet(
-          new ShotEvent
-          {
-            EntryPoint = _bulletEntryPoint.GlobalTranslation,
-            Direction = -1 * GlobalTranslation + _bulletEntryPoint.GlobalTranslation
-          }
-        );
-        // limit = 0.2f;
-      // }
-    }
+    // limit = limit - delta;
+    // if (Input.IsActionPressed("ui_accept"))
+    // {
+    //   if (limit <= 0)
+    //   {
+    //     _bulletEventManager.AddBullet(
+    //       new ShotEvent
+    //       {
+    //         EntryPoint = _bulletEntryPoint.GlobalTranslation,
+    //         Direction = -1 * GlobalTranslation + _bulletEntryPoint.GlobalTranslation
+    //       }
+    //     );
+    //     limit = 0.2f;
+    //   }
+    // }
 
     if (_configuration.IsFreeViewCameraMode && Input.MouseMode.IsVisible())
     {
@@ -68,6 +72,14 @@ public class Player : KinematicBody
   }
   public override void _Input(InputEvent @event)
   {
+    if (Input.IsActionJustPressed("ui_accept"))
+    {
+      _weapon.StartShooting();
+    }
+    else if (Input.IsActionJustReleased("ui_accept"))
+    {
+      _weapon.StopShooting();
+    }
     // if (IsMouseModeVisible && @event is InputEventMouseMotion mouseEvent)
     // {
     //   GD.Print(mouseEvent.Relative);
@@ -79,6 +91,7 @@ public class Player : KinematicBody
     //   Transform = transform;
     // }
   }
+
 
   // private void MoveByJoy()
   // {

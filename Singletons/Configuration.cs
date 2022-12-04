@@ -25,6 +25,15 @@ public class Configuration : Node
 
   public override void _Ready()
   {
+    if (OS.IsDebugBuild())
+    {
+      var screenSize = OS.GetScreenSize(0);
+      OS.WindowPosition = new Vector2(
+        screenSize.x / 2 - OS.WindowSize.x / 2,
+        screenSize.y / 2 - OS.WindowSize.y / 2
+      );
+    }
+
     Input.MouseMode = Input.MouseModeEnum.Captured;
     CameraMode = CameraMode.FreeView;
 
@@ -32,8 +41,8 @@ public class Configuration : Node
     {
       DefaultSpeed = 30f,
       MaxExistingTimeSec = 3f,
-      DeviationDegrees = 5,
-      DeviationRadians = Mathf.Deg2Rad(5)
+      DeviationDegrees = 1,
+      DeviationRadians = Mathf.Deg2Rad(1)
     };
   }
 
