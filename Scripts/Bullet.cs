@@ -1,65 +1,71 @@
+using System;
 using Godot;
 
-public class Bullet : Area
+public class Bullet : MeshInstance
 {
-  private Configuration _configuration;
-  private Timer _timer;
+  private BulletEventManager _bulletEventManager;
+  private PhysicsDirectSpaceState _directSpaceState;
 
-  public Vector3 Direction { get; set; } = Vector3.Zero;
+  private float _speed = BulletDefaultOptions.DefaultSpeed;
+  private float _deviationRadians = BulletDefaultOptions.DeviationRadians;
+  private float _existingTimeSec = BulletDefaultOptions.MaxExistingTimeSec;
+  private Vector3 _direction;
 
   public override void _Ready()
   {
-    _configuration = GetNode<Configuration>("/root/Configuration");
-
-    Direction = Direction.Rotated(
-      Vector3.Up,
-      (float)GD.RandRange(
-        -1 * _configuration.Bullets.DeviationRadians,
-        _configuration.Bullets.DeviationRadians
-        )
-    );
-
-    _timer = GetNode<Timer>("DisposeTimer");
-    _timer.WaitTime = _configuration.Bullets.MaxExistingTimeSec;
-    _timer.Connect("timeout", this, "Remove");
-    _timer.Start();
+    _bulletEventManager = GetNode<BulletEventManager>("/root/BulletEventManager");
+    _directSpaceState = GetWorld().DirectSpaceState;
+    SetAsToplevel(true);
   }
 
   public override void _PhysicsProcess(float delta)
   {
-    MoveAsArea(delta);
-    // MoveAsKinematicBody(delta)
-  }
-
-  private void _on_Bullet_body_entered(Node body)
-  {
-    if (body is SphereObject sphere)
+    _existingTimeSec -= delta;
+    if (_existingTimeSec <= 0)
     {
-      sphere.QueueFree();
-      Remove();
+      Disable();
+    }
+
+    Move(delta);
+
+    // var result = CheckCollision();
+    var result = _directSpaceState.IntersectPoint(GlobalTranslation, 1);
+    if (result != null && result.Count > 0)
+    {
+      GD.Print("Intersect");
+      Disable();
     }
   }
 
-  private void Remove()
+  private Godot.Collections.Array CheckCollision()
   {
-    QueueFree();
+    var query = new PhysicsShapeQueryParameters();
+    query.SetShape(new Resource());
+    return GetWorld().DirectSpaceState.IntersectShape(query, 1);
   }
 
-  private void MoveAsArea(float delta)
+  private void Move(float delta)
   {
-    Translation += Direction * delta * _configuration.Bullets.DefaultSpeed;
+    Translation += _direction * delta * _speed;
   }
 
-  // private void MoveAsKinematicBody(float delta)
-  // {
-  //   var collisionInfo = MoveAndCollide(Direction * delta * 5);
-  //   if (collisionInfo != null)
-  //   {
-  //     if (collisionInfo.Collider is SphereObject sphere)
-  //     {
-  //       sphere.QueueFree();
-  //       QueueFree();
-  //     }
-  //   }
-  // }
+  public void Disable()
+  {
+    SetProcess(false);
+    Hide();
+    _bulletEventManager.FreeBullets.Enqueue(this);
+  }
+
+  public void Enable(Vector3 entryPoint, Vector3 direction)
+  {
+    Translation = entryPoint;
+
+    _direction = direction.Rotated(
+      Vector3.Up,
+      (float)GD.RandRange(-1 * _deviationRadians, _deviationRadians)
+    );
+
+    SetProcess(true);
+    Show();
+  }
 }

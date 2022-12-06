@@ -1,18 +1,18 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public class BulletEventManager : Node
 {
-  public delegate void CreateBulletEvent(ShotEvent @event);
-  private event CreateBulletEvent CreateBullet;
+  public Queue<Bullet> FreeBullets { get; set; } = new Queue<Bullet>();
 
-  public void AddBullet(ShotEvent @event)
+  public override void _Ready()
   {
-    CreateBullet?.Invoke(@event);
-  }
+    var bulletTemplate = GD.Load<PackedScene>("res://Scenes/Bullet.tscn");
 
-  public void OnBulletAdd(CreateBulletEvent handler)
-  {
-    CreateBullet += handler;
+    for (int i = 0; i < 20000; i++)
+    {
+      FreeBullets.Enqueue(bulletTemplate.Instance<Bullet>());
+    }
   }
 }
