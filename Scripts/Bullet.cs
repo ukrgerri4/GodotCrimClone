@@ -29,11 +29,13 @@ public class Bullet : MeshInstance
     Move(delta);
 
     // var result = CheckCollision();
-    var result = _directSpaceState.IntersectPoint(GlobalTranslation, 1);
-    if (result != null && result.Count > 0)
+    var result = _directSpaceState.IntersectPoint(GlobalTranslation, maxResults: 1, collisionLayer: 2);
+    if (result.Count > 0)
     {
-      GD.Print("Intersect");
       Disable();
+      if (result[0] is Godot.Collections.Dictionary dict && dict.Contains("collider") && dict["collider"] is SphereObject so) {
+        so.QueueFree();
+      }
     }
   }
 
@@ -51,6 +53,7 @@ public class Bullet : MeshInstance
 
   public void Disable()
   {
+    SetPhysicsProcess(false);
     SetProcess(false);
     Hide();
     _bulletEventManager.FreeBullets.Enqueue(this);
@@ -65,6 +68,9 @@ public class Bullet : MeshInstance
       (float)GD.RandRange(-1 * _deviationRadians, _deviationRadians)
     );
 
+    _existingTimeSec = BulletDefaultOptions.MaxExistingTimeSec;
+
+    SetPhysicsProcess(true);
     SetProcess(true);
     Show();
   }

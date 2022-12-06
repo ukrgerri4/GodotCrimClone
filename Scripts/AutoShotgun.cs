@@ -18,7 +18,7 @@ public class AutoShotgun : Weapon
   public int MagazineCapacity { get; set; } = 30;
   public int EffectiveRange { get; set; } = 30;
 
-  private int _framesBetweenBullet = 10;
+  private int _framesBetweenBullet = 5;
   private int _framesToNextBullet = 0;
 
   public override void _Ready()
@@ -33,7 +33,7 @@ public class AutoShotgun : Weapon
     {
       if (IsShooting)
       {
-        Shoot();
+          Shoot();
         _framesToNextBullet = _framesBetweenBullet;
       }
     }
@@ -47,10 +47,14 @@ public class AutoShotgun : Weapon
   {
     var bullet = _bulletEventManager.FreeBullets.Dequeue();
     bullet.Enable(
-      _bulletEntryPoint.GlobalTranslation,
+      _bulletEntryPoint.Translation,
       -1 * new Vector3(GlobalTranslation.x, _bulletEntryPoint.GlobalTranslation.y, GlobalTranslation.z) + _bulletEntryPoint.GlobalTranslation
     );
-    AddChild(bullet);
+
+    if (!bullet.IsInsideTree())
+    {
+      AddChild(bullet);
+    }
   }
 
   public override void StartShooting()
