@@ -8,9 +8,9 @@ public class BulletEventManager : Node
 
   public override void _Ready()
   {
-    var bulletTemplate = GD.Load<PackedScene>("res://Scenes/Bullet.tscn");
+    var bulletTemplate = GD.Load<PackedScene>("res://Scenes/Components/Bullet.tscn");
 
-    for (int i = 0; i < 20000; i++)
+    for (int i = 0; i < 1000; i++)
     {
       FreeBullets.Enqueue(bulletTemplate.Instance<Bullet>());
     }

@@ -6,10 +6,11 @@ public class Bullet : MeshInstance
   private BulletEventManager _bulletEventManager;
   private PhysicsDirectSpaceState _directSpaceState;
 
+  private Vector3 _direction;
   private float _speed = BulletDefaultOptions.DefaultSpeed;
   private float _deviationRadians = BulletDefaultOptions.DeviationRadians;
   private float _existingTimeSec = BulletDefaultOptions.MaxExistingTimeSec;
-  private Vector3 _direction;
+  private float _damage = BulletDefaultOptions.BaseDamage;
 
   public override void _Ready()
   {
@@ -33,8 +34,8 @@ public class Bullet : MeshInstance
     if (result.Count > 0)
     {
       Disable();
-      if (result[0] is Godot.Collections.Dictionary dict && dict.Contains("collider") && dict["collider"] is SphereObject so) {
-        so.QueueFree();
+      if (result[0] is Godot.Collections.Dictionary dict && dict.Contains("collider") && dict["collider"] is Zombie zombie) {
+        zombie.HandleHit(_damage);
       }
     }
   }
@@ -48,13 +49,14 @@ public class Bullet : MeshInstance
 
   private void Move(float delta)
   {
-    Translation += _direction * delta * _speed;
+    Translation += _direction * _speed * delta;
   }
 
   public void Disable()
   {
     SetPhysicsProcess(false);
-    SetProcess(false);
+    // SetProcess(false);
+    // SetProcessInput(false);
     Hide();
     _bulletEventManager.FreeBullets.Enqueue(this);
   }
@@ -71,7 +73,8 @@ public class Bullet : MeshInstance
     _existingTimeSec = BulletDefaultOptions.MaxExistingTimeSec;
 
     SetPhysicsProcess(true);
-    SetProcess(true);
+    // SetProcess(true);
+    // SetProcessInput(true);
     Show();
   }
 }

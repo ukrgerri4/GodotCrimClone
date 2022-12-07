@@ -4,34 +4,27 @@ using System;
 public class Player : KinematicBody
 {
   private Configuration _configuration;
-  // private BulletEventManager _bulletEventManager;
   private CursorEventManager _cursorEventManager;
   private PlayerCamera _playerCamera;
-  // private PackedScene _bulletTemplate;
-  // private Position3D _bulletEntryPoint;
   private Weapon _weapon;
 
   private bool IsMouseModeVisible => Input.MouseMode == Input.MouseModeEnum.Visible;
 
-  // Called when the node enters the scene tree for the first time.
   public override void _Ready()
   {
     _playerCamera = GetNode<PlayerCamera>("Camera");
-    _weapon = GD.Load<PackedScene>("res://Scenes/AutoShotgun.tscn").Instance<AutoShotgun>(); 
+    
+    _weapon = GD.Load<PackedScene>("res://Scenes/Weapons/AutoShotgun.tscn").Instance<AutoShotgun>();
     _weapon.Translation = new Vector3(0, 0, -0.25f);
     AddChild(_weapon);
-    // _bulletEntryPoint = GetNode<Position3D>("BulletEntryPoint");
-    // _bulletTemplate = GD.Load<PackedScene>("res://Scenes/Bullet.tscn");
 
     _configuration = GetNode<Configuration>("/root/Configuration");
-    // _bulletEventManager = GetNode<BulletEventManager>("/root/BulletEventManager");
-    _cursorEventManager = GetNode<CursorEventManager>("/root/CursorEventManager");
-
     _configuration.OnMouseCaptionChanged += (CameraModeChangedEvent @event) =>
     {
       _playerCamera.Current = @event.CameraMode == CameraMode.Player ? true : false;
     };
 
+    _cursorEventManager = GetNode<CursorEventManager>("/root/CursorEventManager");
     _cursorEventManager.AddPositionChangedHandler((CursorPositionChangedEvent @event) =>
     {
       var lookAtPosition = new Vector3(@event.Position);
@@ -40,30 +33,8 @@ public class Player : KinematicBody
     });
   }
 
-  public override void _Process(float delta)
-  {
-
-  }
-
-  // private float limit = 0.2f;
   public override void _PhysicsProcess(float delta)
   {
-    // limit = limit - delta;
-    // if (Input.IsActionPressed("ui_accept"))
-    // {
-    //   if (limit <= 0)
-    //   {
-    //     _bulletEventManager.AddBullet(
-    //       new ShotEvent
-    //       {
-    //         EntryPoint = _bulletEntryPoint.GlobalTranslation,
-    //         Direction = -1 * GlobalTranslation + _bulletEntryPoint.GlobalTranslation
-    //       }
-    //     );
-    //     limit = 0.2f;
-    //   }
-    // }
-
     if (_configuration.IsFreeViewCameraMode && Input.MouseMode.IsVisible())
     {
       MoveByKeyboard(delta);
