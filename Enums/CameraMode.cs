@@ -1,5 +1,6 @@
 public enum CameraMode
 {
   FreeView,
-  Player
+  PlayerPerspective,
+  PlayerOrthogonal
 }

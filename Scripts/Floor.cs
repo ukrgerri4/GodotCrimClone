@@ -11,7 +11,7 @@ public class Floor : StaticBody
 
   private void _on_Floor_input_event(Camera camera, InputEvent @event, Vector3 position, Vector3 normal, int shape_idx)
   {
-    if (camera is FreeCamera && @event is InputEventMouseMotion eventMouseMotion)
+    if (/*camera is FreeCamera &&*/ @event is InputEventMouseMotion eventMouseMotion)
     {
       _cursorEventManager.NotifyPositionChanged(
         new CursorPositionChangedEvent

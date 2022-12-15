@@ -1,20 +1,23 @@
 using Godot;
 using System;
 
-public class PlayerCamera : Camera
+public class PerspectiveCamera : Camera
 {
-  private Configuration configuration;
+  private Configuration _configuration;
+  private Player _palyer;
 
   // Called when the node enters the scene tree for the first time.
   public override void _Ready()
   {
-    configuration = GetNode<Configuration>("/root/Configuration");
-    configuration.OnMouseCaptionChanged += (CameraModeChangedEvent @event) =>
+    SetAsToplevel(true);
+
+    _configuration = GetNode<Configuration>("/root/Configuration");
+    _configuration.OnMouseCaptionChanged += (CameraModeChangedEvent @event) =>
     {
-      Current = @event.CameraMode == CameraMode.Player ? true : false;
+      Current = @event.CameraMode == CameraMode.PlayerPerspective ? true : false;
     };
 
-    var palyer = GetParent<Player>();
+    _palyer = GetParent<Player>();
 
     // Translation = new Vector3(palyer.Translation.x, palyer.Translation.y + 20, palyer.Translation.z);
     // LookAt(palyer.Translation, Vector3.Up);
@@ -23,6 +26,8 @@ public class PlayerCamera : Camera
   public override void _Input(InputEvent @event)
   {
     if (!Current) { return; }
+
+    // LookAt(_palyer.LookUpPosition, Vector3.Up);
   }
 
   //  // Called every frame. 'delta' is the elapsed time since the previous frame.

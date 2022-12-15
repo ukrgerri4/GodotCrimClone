@@ -5,24 +5,18 @@ public class Player : KinematicBody
 {
   private Configuration _configuration;
   private CursorEventManager _cursorEventManager;
-  private PlayerCamera _playerCamera;
+  private PerspectiveCamera _playerCamera;
   private Weapon _weapon;
 
   private bool IsMouseModeVisible => Input.MouseMode == Input.MouseModeEnum.Visible;
 
   public override void _Ready()
-  {
-    _playerCamera = GetNode<PlayerCamera>("Camera");
-    
+  {  
     _weapon = GD.Load<PackedScene>("res://Scenes/Weapons/AutoShotgun.tscn").Instance<AutoShotgun>();
     _weapon.Translation = new Vector3(0, 0, -0.25f);
     AddChild(_weapon);
 
     _configuration = GetNode<Configuration>("/root/Configuration");
-    _configuration.OnMouseCaptionChanged += (CameraModeChangedEvent @event) =>
-    {
-      _playerCamera.Current = @event.CameraMode == CameraMode.Player ? true : false;
-    };
 
     _cursorEventManager = GetNode<CursorEventManager>("/root/CursorEventManager");
     _cursorEventManager.AddPositionChangedHandler((CursorPositionChangedEvent @event) =>
@@ -35,7 +29,7 @@ public class Player : KinematicBody
 
   public override void _PhysicsProcess(float delta)
   {
-    if (_configuration.IsFreeViewCameraMode && Input.MouseMode.IsVisible())
+    if (Input.MouseMode.IsVisible())
     {
       MoveByKeyboard(delta);
     }

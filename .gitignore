@@ -9,5 +9,6 @@ export_presets.cfg
 data_*/
 
 # Blender imports
-Blender/*.glb
-Blender/*.glb.*
+!/Blender
+/Blender/*
+!/Blender/*.material

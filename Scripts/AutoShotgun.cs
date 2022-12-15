@@ -47,7 +47,7 @@ public class AutoShotgun : Weapon
   {
     var bullet = _bulletEventManager.FreeBullets.Dequeue();
     bullet.Enable(
-      _bulletEntryPoint.Translation,
+      _bulletEntryPoint.GlobalTranslation,
       -1 * new Vector3(GlobalTranslation.x, _bulletEntryPoint.GlobalTranslation.y, GlobalTranslation.z) + _bulletEntryPoint.GlobalTranslation
     );
 

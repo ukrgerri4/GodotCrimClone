@@ -16,7 +16,7 @@ public class Main : Spatial
   public override void _Process(float delta)
   {
     count++;
-    if (count % 30 == 0)
+    if (count % 20 == 0)
     {
       AddSphere();
       count = 0;

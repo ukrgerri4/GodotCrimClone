@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
-[ext_resource path="res://Scripts/PlayerCamera.cs" type="Script" id=2]
+[ext_resource path="res://Scripts/OrthogonalCamera.cs" type="Script" id=2]
+[ext_resource path="res://Scripts/PerspectiveCamera.cs" type="Script" id=3]
 
 [sub_resource type="CylinderShape" id=1]
 
@@ -32,6 +33,17 @@ transform = Transform( 0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0 )
 mesh = SubResource( 2 )
 material/0 = SubResource( 3 )
 
-[node name="Camera" type="Camera" parent="."]
-transform = Transform( -4.37114e-08, 1, 4.37114e-08, 0, -4.37114e-08, 1, 1, 4.37114e-08, 1.91069e-15, 0, 20, 0 )
+[node name="PerspectiveCamera" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 100, 100 )
+current = true
+fov = 25.0
+far = 250.0
+script = ExtResource( 3 )
+
+[node name="OrthogonalCamera" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 100, 100 )
+projection = 1
+current = true
+size = 45.0
+far = 250.0
 script = ExtResource( 2 )

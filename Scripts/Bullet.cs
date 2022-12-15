@@ -19,6 +19,10 @@ public class Bullet : MeshInstance
     SetAsToplevel(true);
   }
 
+  // public override void _Process(float delta)
+  // {
+  // }
+
   public override void _PhysicsProcess(float delta)
   {
     _existingTimeSec -= delta;

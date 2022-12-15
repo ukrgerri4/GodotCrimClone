@@ -16,7 +16,7 @@ public class Configuration : Node
     }
   }
 
-  public bool IsPlayerCameraMode => CameraMode == CameraMode.Player;
+  public bool IsPlayerCameraMode => CameraMode == CameraMode.PlayerPerspective;
   public bool IsFreeViewCameraMode => CameraMode == CameraMode.FreeView;
 
   public float MouseSensitivity { get; set; } = 0.002f;
@@ -77,6 +77,7 @@ public class Configuration : Node
 
   private void ToggleCameraMode()
   {
-    CameraMode = CameraMode == CameraMode.FreeView ? CameraMode.Player : CameraMode.FreeView;
+    var nextCameraMode = ((int)CameraMode + 1) % 3;
+    CameraMode = (CameraMode)nextCameraMode;
   }
 }

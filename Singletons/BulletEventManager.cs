@@ -10,9 +10,11 @@ public class BulletEventManager : Node
   {
     var bulletTemplate = GD.Load<PackedScene>("res://Scenes/Components/Bullet.tscn");
 
-    for (int i = 0; i < 1000; i++)
+    for (int i = 0; i < 100; i++)
     {
       FreeBullets.Enqueue(bulletTemplate.Instance<Bullet>());
     }
   }
+
+  // TODO: add mechanism to create new bullets and add to queue in case of bullet lack
 }

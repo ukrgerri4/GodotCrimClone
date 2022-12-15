@@ -1,21 +1,16 @@
 using Godot;
 using System;
 
-public class HealthBar3D : Spatial
+public class HealthBar3D : MeshInstance
 {
-  private ProgressBar _healthBar2D;
-
-  public float MaxValue = 0;
-
+  
   public override void _Ready()
   {
-    _healthBar2D = GetNode<ProgressBar>("Viewport/HealthBar2D");
-    _healthBar2D.MaxValue = MaxValue;
-    _healthBar2D.Value = MaxValue;
+
   }
 
-  public void Update(float value)
+  public override void _PhysicsProcess(float delta)
   {
-    _healthBar2D.Value = value;
+    LookAt(GetViewport().GetCamera().Translation, Vector3.Up);
   }
 }
