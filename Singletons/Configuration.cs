@@ -62,6 +62,10 @@ public class Configuration : Node
     {
       ToggleMouseMode();
     }
+
+    if (Input.IsActionJustPressed("full_screen")){
+      OS.WindowFullscreen = OS.WindowFullscreen ? false : true;
+    }
   }
 
   private void ToggleMouseMode()

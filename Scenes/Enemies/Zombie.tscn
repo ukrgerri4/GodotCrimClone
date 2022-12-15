@@ -12,7 +12,7 @@ metallic = 0.1
 roughness = 0.5
 
 [node name="KinematicBody" type="KinematicBody"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
+transform = Transform( 0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 1, 0 )
 collision_layer = 2
 collision_mask = 0
 input_ray_pickable = false
