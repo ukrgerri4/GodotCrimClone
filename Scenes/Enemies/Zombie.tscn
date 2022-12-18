@@ -8,7 +8,7 @@
 [sub_resource type="CylinderMesh" id=5]
 
 [sub_resource type="SpatialMaterial" id=3]
-albedo_color = Color( 0.662745, 0.803922, 0.627451, 1 )
+albedo_color = Color( 0.737255, 0.435294, 0.662745, 1 )
 metallic = 0.1
 roughness = 0.5
 
