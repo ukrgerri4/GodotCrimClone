@@ -1,40 +1,45 @@
 using Godot;
 using System;
-using System.Threading.Tasks;
-using System.Timers;
 
-public class AutoShotgun : Weapon
+public class Laser : Weapon
 {
   private BulletEventManager _bulletEventManager;
   private Position3D _bulletEntryPoint;
-  private CursorEventManager _cursorEventManager;
-  
+  private RayCast _rayCast;
+  private ImmediateGeometry _immediateGeometry;
   private WeaponState _state = WeaponState.Inactive;
   public WeaponState State => _state;
   public bool IsShooting => State == WeaponState.Shooting;
   public bool IsInactive => State == WeaponState.Inactive;
 
-  public int MaxAmmoCapacity { get; set; } = 300;
-  public int AmmoCapacity { get; set; } = 30;
-  public int MagazineCapacity { get; set; } = 30;
-  public int EffectiveRange { get; set; } = 30;
-
-  private int _framesBetweenBullet = 5;
+  private int _framesBetweenBullet = 15;
   private int _framesToNextBullet = 0;
 
   public override void _Ready()
   {
     _bulletEventManager = GetNode<BulletEventManager>("/root/BulletEventManager");
     _bulletEntryPoint = GetNode<Position3D>("BulletEntryPoint");
+    _rayCast = GetNode<RayCast>("RayCast");
+    _immediateGeometry = GetNode<ImmediateGeometry>("ImmediateGeometry");
   }
 
   public override void _PhysicsProcess(float delta)
   {
+    // _immediateGeometry.Clear();
+    _rayCast.CastTo = new Vector3(_rayCast.Translation.x * 150, _rayCast.Translation.y, _rayCast.Translation.z * 150);
+    // if (_rayCast.IsColliding())
+    // {
+    //   _immediateGeometry.Begin(Mesh.PrimitiveType.LineStrip);
+    //   _immediateGeometry.AddVertex(ToLocal(_rayCast.GlobalTransform.origin));
+    //   _immediateGeometry.AddVertex(ToLocal(_rayCast.GetCollisionPoint()));
+    //   _immediateGeometry.End();
+    // }
+
     if (_framesToNextBullet == 0)
     {
       if (IsShooting)
       {
-          Shoot();
+        Shoot();
         _framesToNextBullet = _framesBetweenBullet;
       }
     }
@@ -46,17 +51,11 @@ public class AutoShotgun : Weapon
 
   private void Shoot()
   {
-    var bullet = _bulletEventManager.FreeBullets.Dequeue();
-
-    if (!bullet.IsInsideTree())
+    if (_rayCast.IsColliding())
     {
-      AddChild(bullet);
+      _rayCast.GetCollider
     }
-
-    bullet.Enable(
-      _bulletEntryPoint.GlobalTranslation,
-      -1 * new Vector3(GlobalTranslation.x, _bulletEntryPoint.GlobalTranslation.y, GlobalTranslation.z) + _bulletEntryPoint.GlobalTranslation
-    );
+    _rayCast.GetCollider();
   }
 
   public override void StartShooting()

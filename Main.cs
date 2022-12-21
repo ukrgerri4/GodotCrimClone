@@ -26,7 +26,7 @@ public class Main : Spatial
   {
     var zombie = zombieTemplate.Instance<KinematicBody>();
     float angle = GD.Randf() * Mathf.Pi * 2;
-    zombie.Translation = new Vector3(Mathf.Cos(angle) * 150, 1f, Mathf.Sin(angle) * 150);
+    zombie.Translation = new Vector3(Mathf.Cos(angle) * 75, 1f, Mathf.Sin(angle) * 75);
     AddChild(zombie);
   }
 }

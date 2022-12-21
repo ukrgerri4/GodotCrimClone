@@ -3,7 +3,7 @@ using System;
 
 public class Zombie : KinematicBody
 {
-  private float _speed = 7.5f;
+  private float _speed = 3f;
   private float _healthPoints = 50f;
   private Player _player;
 

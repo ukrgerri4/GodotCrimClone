@@ -3,28 +3,33 @@ using System;
 
 public class Player : KinematicBody
 {
-  private Configuration _configuration;
   private CursorEventManager _cursorEventManager;
-  private PerspectiveCamera _playerCamera;
   private Weapon _weapon;
+  private PerspectiveCamera _perspectiveCamera;
+  private OrthogonalCamera _orthogonalCamera;
+  private Vector3 _lookAtPosition = Vector3.Zero;
 
   private bool IsMouseModeVisible => Input.MouseMode == Input.MouseModeEnum.Visible;
+  private float CameraRotation => _perspectiveCamera.Current ? _perspectiveCamera.GlobalRotation.y : _orthogonalCamera.GlobalRotation.y;
 
   public override void _Ready()
-  {  
-    _weapon = GD.Load<PackedScene>("res://Scenes/Weapons/AutoShotgun.tscn").Instance<AutoShotgun>();
+  {
+    // _weapon = GD.Load<PackedScene>("res://Scenes/Weapons/AutoShotgun.tscn").Instance<AutoShotgun>();
+    _weapon = GD.Load<PackedScene>("res://Scenes/Weapons/Laser.tscn").Instance<Laser>();
     _weapon.Translation = new Vector3(0, 0, -0.25f);
     AddChild(_weapon);
-
-    _configuration = GetNode<Configuration>("/root/Configuration");
 
     _cursorEventManager = GetNode<CursorEventManager>("/root/CursorEventManager");
     _cursorEventManager.AddPositionChangedHandler((CursorPositionChangedEvent @event) =>
     {
-      var lookAtPosition = new Vector3(@event.Position);
-      lookAtPosition.y = Translation.y;
-      LookAt(lookAtPosition, Vector3.Up);
+      _lookAtPosition = new Vector3(@event.Position.x, Translation.y, @event.Position.z);
+      // var lookAtPosition = new Vector3(@event.Position);
+      // lookAtPosition.y = Translation.y;
+      // LookAt(lookAtPosition, Vector3.Up);
     });
+
+    _perspectiveCamera = GetNode<PerspectiveCamera>("PerspectiveCamera");
+    _orthogonalCamera = GetNode<OrthogonalCamera>("OrthogonalCamera");
   }
 
   public override void _PhysicsProcess(float delta)
@@ -32,6 +37,19 @@ public class Player : KinematicBody
     if (Input.MouseMode.IsVisible())
     {
       MoveByKeyboard(delta);
+    }
+    else
+    {
+      _lookAtPosition = new Vector3(
+        Input.GetActionStrength("look_right") - Input.GetActionStrength("look_left"),
+        Translation.y,
+        Input.GetActionStrength("look_backward") - Input.GetActionStrength("look_forward")
+      );
+    }
+
+    if (GlobalTranslation != _lookAtPosition)
+    {
+      LookAt(_lookAtPosition, Vector3.Up);
     }
 
   }
@@ -78,7 +96,7 @@ public class Player : KinematicBody
         Input.GetActionStrength("move_backward") - Input.GetActionStrength("move_forward")
     );
 
-    motion = motion.Normalized();
+    motion = motion.Normalized().Rotated(Vector3.Up, CameraRotation);
 
     MoveAndSlide(motion * 10);
   }
