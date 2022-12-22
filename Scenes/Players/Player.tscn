@@ -1,18 +1,16 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/OrthogonalCamera.cs" type="Script" id=2]
 [ext_resource path="res://Scripts/PerspectiveCamera.cs" type="Script" id=3]
+[ext_resource path="res://Textures/Grungy Canvas II-15.jpg" type="Texture" id=4]
 
 [sub_resource type="CylinderShape" id=1]
 
 [sub_resource type="CylinderMesh" id=2]
 
 [sub_resource type="SpatialMaterial" id=3]
-albedo_color = Color( 0.0392157, 0.294118, 0.0862745, 0.392157 )
-metallic = 0.5
-metallic_specular = 0.0
-roughness = 0.55
+albedo_texture = ExtResource( 4 )
 distance_fade_mode = 1
 distance_fade_min_distance = 0.0
 distance_fade_max_distance = 0.0

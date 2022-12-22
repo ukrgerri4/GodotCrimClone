@@ -20,10 +20,6 @@ Configuration="*res://Singletons/Configuration.cs"
 BulletEventManager="*res://Singletons/BulletEventManager.cs"
 CursorEventManager="*res://Singletons/CursorEventManager.cs"
 
-[debug]
-
-settings/stdout/print_fps=true
-
 [display]
 
 window/size/width=1920

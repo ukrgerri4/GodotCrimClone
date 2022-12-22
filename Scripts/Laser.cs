@@ -21,20 +21,11 @@ public class Laser : Weapon
     _bulletEntryPoint = GetNode<Position3D>("BulletEntryPoint");
     _rayCast = GetNode<RayCast>("RayCast");
     _immediateGeometry = GetNode<ImmediateGeometry>("ImmediateGeometry");
+    _immediateGeometry.SetAsToplevel(true);
   }
 
   public override void _PhysicsProcess(float delta)
   {
-    // _immediateGeometry.Clear();
-    _rayCast.CastTo = new Vector3(_rayCast.Translation.x * 150, _rayCast.Translation.y, _rayCast.Translation.z * 150);
-    // if (_rayCast.IsColliding())
-    // {
-    //   _immediateGeometry.Begin(Mesh.PrimitiveType.LineStrip);
-    //   _immediateGeometry.AddVertex(ToLocal(_rayCast.GlobalTransform.origin));
-    //   _immediateGeometry.AddVertex(ToLocal(_rayCast.GetCollisionPoint()));
-    //   _immediateGeometry.End();
-    // }
-
     if (_framesToNextBullet == 0)
     {
       if (IsShooting)
@@ -51,11 +42,20 @@ public class Laser : Weapon
 
   private void Shoot()
   {
-    if (_rayCast.IsColliding())
-    {
-      _rayCast.GetCollider
-    }
-    _rayCast.GetCollider();
+    // _immediateGeometry.Clear();
+    // _immediateGeometry.Begin(Mesh.PrimitiveType.LineStrip);
+    // _immediateGeometry.AddVertex(ToLocal(_bulletEntryPoint.GlobalTranslation));
+    // var secondPoint = ((-1 * new Vector3(GlobalTranslation.x, _bulletEntryPoint.GlobalTranslation.y, GlobalTranslation.z) + _bulletEntryPoint.GlobalTranslation)).Normalized() * 150;
+    // GD.Print(_bulletEntryPoint.GlobalTranslation, "   ", secondPoint);
+    // _immediateGeometry.AddVertex(ToLocal(secondPoint));
+    // _immediateGeometry.End();
+
+    _immediateGeometry.Begin(Mesh.PrimitiveType.LineStrip);
+    _immediateGeometry.AddVertex(_immediateGeometry.ToLocal(_bulletEntryPoint.GlobalTranslation));
+    var secondPoint = ((-1 * new Vector3(GlobalTranslation.x, _bulletEntryPoint.GlobalTranslation.y, GlobalTranslation.z) + _bulletEntryPoint.GlobalTranslation)).Normalized() * 150;
+    GD.Print(_bulletEntryPoint.GlobalTranslation, "   ", secondPoint);
+    _immediateGeometry.AddVertex(_immediateGeometry.ToLocal(secondPoint));
+    _immediateGeometry.End();
   }
 
   public override void StartShooting()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Blender/Material.material" type="Material" id=1]
 [ext_resource path="res://Scripts/Laser.cs" type="Script" id=2]
@@ -48,6 +48,9 @@ surfaces/0 = {
 "vertex_count": 2324
 }
 
+[sub_resource type="SpatialMaterial" id=4]
+albedo_color = Color( 0, 0, 0, 1 )
+
 [node name="Laser" type="Spatial"]
 transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0 )
 script = ExtResource( 2 )
@@ -66,6 +69,9 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -5 )
 
 [node name="RayCast" type="RayCast" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -5 )
+enabled = true
+cast_to = Vector3( 0, 0.6, -150 )
 collision_mask = 2
 
 [node name="ImmediateGeometry" type="ImmediateGeometry" parent="."]
+material_overlay = SubResource( 4 )
