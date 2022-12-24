@@ -63,13 +63,14 @@ public class PlasmaGunBullet : MeshInstance
         // GD.Print(_splitable);
         if (_splitable)
         {
-          cylinder.Radius = 50f;
+          cylinder.Radius = 10f;
           shapeQuery.SetShape(cylinder);
           shapeQuery.CollisionMask = 2;
           shapeQuery.Exclude = new Godot.Collections.Array { dict["rid"] };
           shapeQuery.Transform = zombieTransform;
-          var result2 = _directSpaceState.IntersectShape(shapeQuery);
-          // GD.Print(result2.Count);
+          // distance priority + maxResult limitation
+          var result2 = _directSpaceState.IntersectShape(shapeQuery, maxResults: 32);
+          GD.Print(result2.Count);
           if (result2.Count > 0)
           {
             for (int i = 0; i < result2.Count; i++)

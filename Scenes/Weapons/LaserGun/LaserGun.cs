@@ -2,12 +2,11 @@ using Godot;
 
 public class LaserGun : Weapon
 {
-  private PhysicsDirectSpaceState _directSpaceState;
   private PackedScene _laserGunBulletTemplate;
 
   public LaserGun() : base(150, 30, 10, 1000, 30)
   {
-    _laserGunBulletTemplate = GD.Load<PackedScene>("res://Scenes/Components/Bullets/LaserGunBullet/LaserGunBullet.tscn");
+    _laserGunBulletTemplate = GD.Load<PackedScene>("res://Scenes/Weapons/LaserGun/LaserGunBullet/LaserGunBullet.tscn");
   }
 
   protected override void HandleShoot()
@@ -15,6 +14,6 @@ public class LaserGun : Weapon
     var bullet = _laserGunBulletTemplate.Instance<LaserGunBullet>();
     bullet.Translation = _bulletEntryPoint.GlobalTranslation;
     bullet.Direction = ((-1 * new Vector3(GlobalTranslation.x, _bulletEntryPoint.GlobalTranslation.y, GlobalTranslation.z) + _bulletEntryPoint.GlobalTranslation)).Normalized() * EffectiveRange;
-    AddChild(bullet);
+    _main.AddChild(bullet);
   }
 }
