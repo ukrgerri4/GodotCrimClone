@@ -19,11 +19,10 @@ config/icon="res://icon.png"
 Configuration="*res://Singletons/Configuration.cs"
 BulletEventManager="*res://Singletons/BulletEventManager.cs"
 CursorEventManager="*res://Singletons/CursorEventManager.cs"
+WeaponsWarehouse="*res://Singletons/WeaponsWarehouse.cs"
 
 [display]
 
-window/size/width=1920
-window/size/height=1080
 window/size/always_on_top=true
 
 [input]
@@ -94,6 +93,11 @@ look_left={
 look_right={
 "deadzone": 0.1,
 "events": [ Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":0,"axis":2,"axis_value":1.0,"script":null)
+ ]
+}
+next_weapon={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":93,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
 

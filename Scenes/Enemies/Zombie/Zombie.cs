@@ -3,7 +3,7 @@ using System;
 
 public class Zombie : KinematicBody
 {
-  private float _speed = 3f;
+  private float _speed = 1f;
   private float _healthPoints = 50f;
   private Player _player;
 
@@ -16,10 +16,17 @@ public class Zombie : KinematicBody
   {
     if (IsQueuedForDeletion()) { return; }
 
-    MoveAndSlide(GlobalTranslation.DirectionTo(_player.GlobalTranslation).Normalized() * _speed);
+    if (OS.IsDebugBuild() && Input.IsKeyPressed((int)KeyList.E))
+    {
+      MoveAndSlide(GlobalTranslation.DirectionTo(_player.GlobalTranslation).Normalized() * _speed * 10);
+    }
+    else
+    {
+      MoveAndSlide(GlobalTranslation.DirectionTo(_player.GlobalTranslation).Normalized() * _speed);
+    }
   }
 
-  public void HandleHit(float damage)
+  public float HandleHit(float damage)
   {
     _healthPoints -= damage;
     if (_healthPoints <= 0)
@@ -30,5 +37,6 @@ public class Zombie : KinematicBody
     {
       // HealthBarUpdate(_healthPoints);
     }
+    return _healthPoints;
   }
 }

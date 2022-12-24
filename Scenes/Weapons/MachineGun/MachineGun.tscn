@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Blender/Material.material" type="Material" id=1]
-[ext_resource path="res://Scripts/AutoShotgun.cs" type="Script" id=2]
+[ext_resource path="res://Scenes/Weapons/MachineGun/MachineGun.cs" type="Script" id=2]
 
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "Auto Shotgun_Cube002"
@@ -48,9 +48,10 @@ surfaces/0 = {
 "vertex_count": 2324
 }
 
-[node name="AutoShotgun" type="Spatial"]
+[node name="MachineGun" type="Spatial"]
 transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0 )
 script = ExtResource( 2 )
+BulletEntryPointPath = NodePath("BulletEntryPoint")
 
 [node name="Part1" type="MeshInstance" parent="."]
 mesh = SubResource( 1 )

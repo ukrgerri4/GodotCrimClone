@@ -1,7 +1,7 @@
 using System;
 using Godot;
 
-public class Bullet : MeshInstance
+public class MachineGunBullet : MeshInstance
 {
   private BulletEventManager _bulletEventManager;
   private PhysicsDirectSpaceState _directSpaceState;
@@ -19,10 +19,6 @@ public class Bullet : MeshInstance
     SetAsToplevel(true);
   }
 
-  // public override void _Process(float delta)
-  // {
-  // }
-
   public override void _PhysicsProcess(float delta)
   {
     _existingTimeSec -= delta;
@@ -33,7 +29,6 @@ public class Bullet : MeshInstance
 
     Move(delta);
 
-    // var result = CheckCollision();
     var result = _directSpaceState.IntersectPoint(GlobalTranslation, maxResults: 1, collisionLayer: 2);
     if (result.Count > 0)
     {
@@ -62,7 +57,7 @@ public class Bullet : MeshInstance
     // SetProcess(false);
     // SetProcessInput(false);
     Hide();
-    _bulletEventManager.FreeBullets.Enqueue(this);
+    _bulletEventManager.EnqueueBullet(this);
   }
 
   public void Enable(Vector3 entryPoint, Vector3 direction)
