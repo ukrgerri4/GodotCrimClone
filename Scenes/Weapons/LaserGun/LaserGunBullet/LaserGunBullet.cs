@@ -26,15 +26,15 @@ public class LaserGunBullet : Position3D
 
     if (result != null && result.Count > 0)
     {
-      if (result is Godot.Collections.Dictionary dict && dict.Contains("collider") && dict["collider"] is Zombie zombie)
-      {
-        var intersectPoint = (Vector3)dict["position"];
-        _draw.DrawLine(from, intersectPoint);
 
+      _draw.DrawLine(from, (Vector3)result["position"]);
+      if (result is Godot.Collections.Dictionary && result.Contains("collider") && result["collider"] is Zombie zombie)
+      {
+        var intersectPoint = (Vector3)result["position"];
         var healthPoint = zombie.HandleHit(damage);
         if (healthPoint < 0)
         {
-          exclude.Add(dict["rid"]);
+          exclude.Add(result["rid"]);
           var leftDamage = Mathf.Abs(healthPoint);
           ProcessShoot(intersectPoint, to, leftDamage, exclude);
         }

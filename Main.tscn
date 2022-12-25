@@ -144,8 +144,6 @@ handle_input_locally = false
 render_target_update_mode = 3
 gui_disable_input = true
 
-[node name="Player" parent="ViewportContainer/Viewport" instance=ExtResource( 5 )]
-
 [connection signal="input_event" from="Floor" to="Floor" method="_on_Floor_input_event"]
 [connection signal="body_entered" from="PruneArea" to="PruneArea" method="_on_PruneArea_body_entered"]
 [connection signal="input_event" from="MouseRayArea" to="MouseRayArea" method="_on_MouseRayArea_input_event"]
