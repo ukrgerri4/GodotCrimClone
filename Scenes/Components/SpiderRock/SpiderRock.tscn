@@ -25,10 +25,21 @@ surfaces/0 = {
 transform = Transform( 1, 0, 0, 0, -1.19209e-07, -1, 0, 1, -1.19209e-07, 0, 0, 0 )
 mesh = SubResource( 1 )
 
-[node name="KinematicBody" type="KinematicBody" parent="SpiderRock02"]
-collision_layer = 2
-collision_mask = 4
+[node name="StaticBody" type="StaticBody" parent="SpiderRock02"]
+collision_layer = 4
+collision_mask = 0
+input_ray_pickable = false
 
-[node name="CollisionShape" type="CollisionShape" parent="SpiderRock02/KinematicBody"]
+[node name="CollisionShape" type="CollisionShape" parent="SpiderRock02/StaticBody"]
+transform = Transform( 29.8935, 0, 0, 0, 23.3538, -9.29179e-07, 0, -9.2918e-07, 15.5593, 0, 0, 0 )
+shape = SubResource( 2 )
+
+[node name="Area" type="Area" parent="SpiderRock02"]
+collision_layer = 4
+collision_mask = 4
+input_ray_pickable = false
+monitoring = false
+
+[node name="CollisionShape" type="CollisionShape" parent="SpiderRock02/Area"]
 transform = Transform( 29.8935, 0, 0, 0, 23.3538, -9.29179e-07, 0, -9.2918e-07, 15.5593, 0, 0, 0 )
 shape = SubResource( 2 )

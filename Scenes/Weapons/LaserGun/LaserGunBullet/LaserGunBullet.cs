@@ -22,7 +22,7 @@ public class LaserGunBullet : Position3D
     {
       exclude = new Array();
     }
-    var result = _directSpaceState.IntersectRay(from, to, exclude: exclude, collisionMask: 3);
+    var result = _directSpaceState.IntersectRay(from, to, exclude: exclude, collisionMask: 4);
 
     if (result != null && result.Count > 0)
     {

@@ -23,6 +23,8 @@ WeaponsWarehouse="*res://Singletons/WeaponsWarehouse.cs"
 
 [display]
 
+window/size/width=1920
+window/size/height=1080
 window/size/always_on_top=true
 
 [input]
@@ -101,6 +103,15 @@ next_weapon={
 , Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":9,"pressed":false,"doubleclick":false,"script":null)
  ]
 }
+
+[layer_names]
+
+3d_physics/layer_1="Players"
+3d_physics/layer_2="Enemies"
+3d_physics/layer_3="BulletPickable"
+3d_physics/layer_4="Bullets"
+3d_physics/layer_5="Floor"
+3d_physics/layer_6="Areas"
 
 [mono]
 

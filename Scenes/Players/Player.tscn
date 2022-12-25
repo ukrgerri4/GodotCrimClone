@@ -13,7 +13,7 @@ albedo_color = Color( 0.0980392, 0.454902, 0, 1 )
 material = SubResource( 3 )
 
 [node name="Player" type="KinematicBody"]
-collision_mask = 2
+collision_mask = 6
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_group_": true
@@ -31,7 +31,7 @@ mesh = SubResource( 2 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 110, 25 )
 current = true
 fov = 20.0
-far = 250.0
+far = 150.0
 script = ExtResource( 2 )
 
 [node name="OrthogonalCamera" type="Camera" parent="."]

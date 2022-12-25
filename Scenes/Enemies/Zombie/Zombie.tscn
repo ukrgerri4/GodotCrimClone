@@ -17,8 +17,8 @@ albedo_color = Color( 0.847059, 0.12549, 0.12549, 1 )
 
 [node name="KinematicBody" type="KinematicBody"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
-collision_layer = 2
-collision_mask = 4
+collision_layer = 6
+collision_mask = 0
 input_ray_pickable = false
 axis_lock_motion_y = true
 move_lock_y = true

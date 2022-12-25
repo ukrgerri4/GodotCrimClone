@@ -29,7 +29,7 @@ public class MachineGunBullet : MeshInstance
 
     Move(delta);
 
-    var result = _directSpaceState.IntersectPoint(GlobalTranslation, maxResults: 1, collisionLayer: 2);
+    var result = _directSpaceState.IntersectPoint(GlobalTranslation, maxResults: 1, collisionLayer: 4);
     if (result.Count > 0)
     {
       Disable();

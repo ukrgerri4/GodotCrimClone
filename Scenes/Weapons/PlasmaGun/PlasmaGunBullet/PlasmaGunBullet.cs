@@ -41,7 +41,7 @@ public class PlasmaGunBullet : MeshInstance
     var shapeQuery = new PhysicsShapeQueryParameters();
     shapeQuery.SetShape(cylinder);
     shapeQuery.Transform = Transform;
-    shapeQuery.CollisionMask = 2;
+    shapeQuery.CollisionMask = 4;
     if (_exclude != null)
     {
 
@@ -49,7 +49,6 @@ public class PlasmaGunBullet : MeshInstance
     }
 
     var result = _directSpaceState.IntersectShape(shapeQuery, maxResults: 1);
-    // GD.Print(result);
 
     if (result.Count > 0)
     {
@@ -60,10 +59,9 @@ public class PlasmaGunBullet : MeshInstance
         var zombieTransform = zombie.Transform;
 
         zombie.HandleHit(_damage);
-        // GD.Print(_splitable);
         if (_splitable)
         {
-          cylinder.Radius = 10f;
+          cylinder.Radius = 5f;
           shapeQuery.SetShape(cylinder);
           shapeQuery.CollisionMask = 2;
           shapeQuery.Exclude = new Godot.Collections.Array { dict["rid"] };
@@ -81,11 +79,9 @@ public class PlasmaGunBullet : MeshInstance
               {
                 _main.AddChild(bullet);
               }
-              // GD.Print("AddBullet");
 
               bullet.Enable(
                 zombieGlobalTranslation,
-                // -1 * new Vector3(enemy.GlobalTranslation.x, zombieGlobalTranslation.y, enemy.GlobalTranslation.z) + zombieGlobalTranslation
                 -1 * new Vector3(zombieGlobalTranslation.x, enemy.GlobalTranslation.y, zombieGlobalTranslation.z) + enemy.GlobalTranslation,
                 exclude: new Godot.Collections.Array { dict["rid"] }
               );
