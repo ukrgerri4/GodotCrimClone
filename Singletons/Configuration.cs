@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 public class Configuration : Node
 {
@@ -19,6 +20,10 @@ public class Configuration : Node
   public bool IsPlayerCameraMode => CameraMode == CameraMode.PlayerPerspective;
   public bool IsFreeViewCameraMode => CameraMode == CameraMode.FreeView;
 
+  public delegate void MouseModeChanged(MouseModeChangedEvent cameraMode);
+  public event MouseModeChanged OnMouseModeChanged;
+
+
   public float MouseSensitivity { get; set; } = 0.002f;
 
   public BulletConfigurations Bullets { get; set; }
@@ -30,20 +35,28 @@ public class Configuration : Node
       var screenSize = OS.GetScreenSize(0);
       OS.WindowPosition = new Vector2(
         screenSize.x / 2 - OS.WindowSize.x / 2,
-        screenSize.y / 2 - OS.WindowSize.y / 2
+        screenSize.y / 2 - OS.WindowSize.y / 2 - 200
       );
     }
 
-    Input.MouseMode = Input.MouseModeEnum.Captured;
-    CameraMode = CameraMode.FreeView;
+    Input.MouseMode = Input.MouseModeEnum.Visible;
 
-    Bullets = new BulletConfigurations
+    Task.Run(async () =>
     {
-      DefaultSpeed = 30f,
-      MaxExistingTimeSec = 3f,
-      DeviationDegrees = 1,
-      DeviationRadians = Mathf.Deg2Rad(1)
-    };
+      await ToSignal(GetTree().Root, "ready");
+
+      Input.MouseMode = Input.MouseModeEnum.Visible;
+      
+      CameraMode = CameraMode.PlayerPerspective;
+      
+      Bullets = new BulletConfigurations
+      {
+        DefaultSpeed = 30f,
+        MaxExistingTimeSec = 3f,
+        DeviationDegrees = 1,
+        DeviationRadians = Mathf.Deg2Rad(1)
+      };
+    });
   }
 
   public override void _Input(InputEvent @event)
@@ -63,7 +76,8 @@ public class Configuration : Node
       ToggleMouseMode();
     }
 
-    if (Input.IsActionJustPressed("full_screen")){
+    if (Input.IsActionJustPressed("full_screen"))
+    {
       OS.WindowFullscreen = OS.WindowFullscreen ? false : true;
     }
   }
@@ -73,6 +87,8 @@ public class Configuration : Node
     Input.MouseMode = Input.MouseMode == Input.MouseModeEnum.Captured
       ? Input.MouseModeEnum.Visible
       : Input.MouseModeEnum.Captured;
+
+    OnMouseModeChanged?.Invoke(new MouseModeChangedEvent(Input.MouseMode));
   }
 
   private void ToggleCameraMode()

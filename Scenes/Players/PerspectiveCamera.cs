@@ -20,7 +20,7 @@ public class PerspectiveCamera : Camera
     _palyer = GetParent<Player>();
 
     // Translation = new Vector3(palyer.Translation.x, palyer.Translation.y + 20, palyer.Translation.z);
-    // LookAt(palyer.Translation, Vector3.Up);
+    LookAt(_palyer.Translation, Vector3.Up);
   }
 
   public override void _Input(InputEvent @event)

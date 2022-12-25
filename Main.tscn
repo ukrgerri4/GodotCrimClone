@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Scripts/Draw.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/FreeCamera.cs" type="Script" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Scripts/Floor.cs" type="Script" id=6]
 [ext_resource path="res://Scripts/Info.cs" type="Script" id=7]
 [ext_resource path="res://Scripts/MouseRayArea.cs" type="Script" id=8]
+[ext_resource path="res://Scenes/Components/SpiderRock/SpiderRock.tscn" type="PackedScene" id=9]
 
 [sub_resource type="BoxShape" id=1]
 
@@ -35,6 +36,36 @@ albedo_color = Color( 0, 0, 0, 1 )
 
 [node name="Main" type="Spatial"]
 script = ExtResource( 3 )
+
+[node name="Info" type="VBoxContainer" parent="."]
+margin_right = 104.0
+margin_bottom = 68.0
+script = ExtResource( 7 )
+
+[node name="Fps" type="Label" parent="Info"]
+margin_right = 104.0
+margin_bottom = 14.0
+
+[node name="CameraMode" type="Label" parent="Info"]
+margin_top = 18.0
+margin_right = 104.0
+margin_bottom = 32.0
+
+[node name="MouseMode" type="Label" parent="Info"]
+margin_top = 36.0
+margin_right = 104.0
+margin_bottom = 50.0
+
+[node name="MouseMovement" type="Label" parent="Info"]
+visible = false
+margin_top = 54.0
+margin_right = 104.0
+margin_bottom = 68.0
+
+[node name="Weapon" type="Label" parent="Info"]
+margin_top = 54.0
+margin_right = 104.0
+margin_bottom = 68.0
 
 [node name="Floor" type="StaticBody" parent="."]
 collision_mask = 0
@@ -66,25 +97,6 @@ mesh = SubResource( 6 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
 input_ray_pickable = false
 
-[node name="Info" type="VBoxContainer" parent="."]
-margin_right = 104.0
-margin_bottom = 50.0
-script = ExtResource( 7 )
-
-[node name="Fps" type="Label" parent="Info"]
-margin_right = 104.0
-margin_bottom = 14.0
-
-[node name="CameraModeLabel" type="Label" parent="Info"]
-margin_top = 18.0
-margin_right = 104.0
-margin_bottom = 32.0
-
-[node name="MouseMovement" type="Label" parent="Info"]
-margin_top = 36.0
-margin_right = 104.0
-margin_bottom = 50.0
-
 [node name="FreeCamera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 100, 100 )
 fov = 20.0
@@ -104,6 +116,15 @@ script = ExtResource( 8 )
 [node name="CollisionShape" type="CollisionShape" parent="MouseRayArea"]
 transform = Transform( 200, 0, 0, 0, 1, 0, 0, 0, 200, 0, 0, 0 )
 shape = SubResource( 4 )
+
+[node name="SpiderRock" parent="." instance=ExtResource( 9 )]
+transform = Transform( 0.267856, 0, 0, 0, 0.267856, 0, 0, 0, 0.267856, -19.3914, 5.18838, -17.7521 )
+
+[node name="SpiderRock2" parent="." instance=ExtResource( 9 )]
+transform = Transform( 0.0407523, 0, 0, 0, 0.0407523, 0, 0, 0, 0.0407523, -11.4558, 0.866596, -1.15486 )
+
+[node name="SpiderRock3" parent="." instance=ExtResource( 9 )]
+transform = Transform( 0.0407523, 0, 0, 0, 0.0407523, 0, 0, 0, 0.0407523, 8.88591, 0.802068, -1.15486 )
 
 [connection signal="input_event" from="Floor" to="Floor" method="_on_Floor_input_event"]
 [connection signal="body_entered" from="PruneArea" to="PruneArea" method="_on_PruneArea_body_entered"]

@@ -5,7 +5,7 @@ public class FreeCamera : Camera
 {
   private Configuration configuration;
   private const float MOUSE_SENSITIVITY = 0.002f;
-  private const float MOVE_SPEED = 1.5f;
+  private const float MOVE_SPEED = 15f;
 
   private Vector3 rotation = Vector3.Zero;
   private Vector3 velocity = Vector3.Zero;

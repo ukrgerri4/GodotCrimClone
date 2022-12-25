@@ -12,6 +12,3 @@ data_*/
 !/Blender
 /Blender/*
 !/Blender/*.material
-
-# Textures imports
-/Textures/*

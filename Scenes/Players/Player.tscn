@@ -28,9 +28,9 @@ transform = Transform( 0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0 )
 mesh = SubResource( 2 )
 
 [node name="PerspectiveCamera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 100, 100 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 110, 25 )
 current = true
-fov = 25.0
+fov = 20.0
 far = 250.0
 script = ExtResource( 2 )
 

@@ -3,6 +3,9 @@ using System.Linq;
 
 public class Player : KinematicBody
 {
+  public delegate void WeaponChanged(WeaponChangedEvent @event);
+  public event WeaponChanged OnWeaponChanged;
+
   private WeaponsWarehouse _weaponsWarehouse;
   private CursorEventManager _cursorEventManager;
 
@@ -45,7 +48,7 @@ public class Player : KinematicBody
       );
     }
 
-    if (GlobalTranslation != _lookAtPosition)
+    if (GlobalTranslation.x != _lookAtPosition.x && GlobalTranslation.z != _lookAtPosition.z)
     {
       LookAt(_lookAtPosition, Vector3.Up);
     }
@@ -91,7 +94,7 @@ public class Player : KinematicBody
   private void NextWeapon()
   {
     var weapon = _weaponsWarehouse.GetNextWeapon();
-    ChangeWeapon(weapon);
+    ChangeWeapon(weapon);   
   }
 
   private void ChangeWeapon(Weapon weapon)
@@ -109,5 +112,7 @@ public class Player : KinematicBody
     {
       AddChild(_weapon);
     }
+
+    OnWeaponChanged?.Invoke(new WeaponChangedEvent(weapon.GetType().Name));
   }
 }
