@@ -12,7 +12,7 @@ public class Player : KinematicBody
   private Weapon _weapon;
   private PerspectiveCamera _perspectiveCamera;
   private OrthogonalCamera _orthogonalCamera;
-
+  private Tween _tween;
   private Vector3 _lookAtPosition = Vector3.Zero;
 
   private bool IsMouseModeVisible => Input.MouseMode == Input.MouseModeEnum.Visible;
@@ -31,6 +31,7 @@ public class Player : KinematicBody
 
     _perspectiveCamera = GetNode<PerspectiveCamera>("PerspectiveCamera");
     _orthogonalCamera = GetNode<OrthogonalCamera>("OrthogonalCamera");
+    _tween = GetNode<Tween>("Tween");
   }
 
   public override void _PhysicsProcess(float delta)
@@ -38,22 +39,18 @@ public class Player : KinematicBody
     if (Input.MouseMode.IsVisible())
     {
       Move(delta);
+      if (GlobalTranslation.x != _lookAtPosition.x && GlobalTranslation.z != _lookAtPosition.z)
+      {
+        LookAt(_lookAtPosition, Vector3.Up);
+      }
     }
     else
     {
-      _lookAtPosition = new Vector3(
-        Input.GetActionStrength("look_right") - Input.GetActionStrength("look_left"),
-        Translation.y,
-        Input.GetActionStrength("look_backward") - Input.GetActionStrength("look_forward")
-      );
+      Move(delta);
+      LookByJoy(delta);
     }
-
-    if (GlobalTranslation.x != _lookAtPosition.x && GlobalTranslation.z != _lookAtPosition.z)
-    {
-      LookAt(_lookAtPosition, Vector3.Up);
-    }
-
   }
+
   public override void _Input(InputEvent @event)
   {
     if (Input.IsActionJustPressed("next_weapon"))
@@ -74,15 +71,43 @@ public class Player : KinematicBody
 
   private void Move(float delta)
   {
-    var motion = new Vector3(
-        Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left"),
-        0,
-        Input.GetActionStrength("move_backward") - Input.GetActionStrength("move_forward")
-    );
+    var moveX = Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left");
+    var moveZ = Input.GetActionStrength("move_backward") - Input.GetActionStrength("move_forward");
 
-    motion = motion.Normalized().Rotated(Vector3.Up, CameraRotation);
+    if (moveX != 0 || moveZ != 0)
+    {
+      var motion = new Vector3(moveX, 0, moveZ);
 
-    MoveAndSlide(motion * 10);
+      motion = motion.Normalized().Rotated(Vector3.Up, CameraRotation);
+
+      MoveAndSlide(motion * 10);
+    }
+  }
+
+  private void LookByJoy(float delta)
+  {
+    var lookX = Input.GetActionStrength("look_right") - Input.GetActionStrength("look_left");
+    var lookZ = Input.GetActionStrength("look_backward") - Input.GetActionStrength("look_forward");
+
+    if (lookX != 0 || lookZ != 0)
+    {
+      var a = new Vector2(lookX, lookZ).Rotated(Mathf.Deg2Rad(90)).Rotated(CameraRotation).Angle();
+      var m = new Vector3(lookX, Translation.y, lookZ);
+      // GD.Print($"[{lookX}:{lookZ}:{Mathf.Rad2Deg(a)}:{m}]");
+
+      // LookAt(m, Vector3.Up);
+
+      _tween.StopAll();
+      _tween.InterpolateProperty(this, "rotation:y", Rotation.y, -1 * a, 0.05f, Tween.TransitionType.Quad, Tween.EaseType.Out);
+      _tween.Start();
+
+      // _lookAtPosition = new Vector3(
+      //   Input.GetActionStrength("look_right") - Input.GetActionStrength("look_left"),
+      //   Translation.y,
+      //   Input.GetActionStrength("look_backward") - Input.GetActionStrength("look_forward")
+      // );
+      // Rotation = m;
+    }
   }
 
   private void EquipWeapon()
@@ -94,7 +119,7 @@ public class Player : KinematicBody
   private void NextWeapon()
   {
     var weapon = _weaponsWarehouse.GetNextWeapon();
-    ChangeWeapon(weapon);   
+    ChangeWeapon(weapon);
   }
 
   private void ChangeWeapon(Weapon weapon)

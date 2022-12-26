@@ -12,7 +12,7 @@ public class Main : Spatial
     configuration = GetNode<Configuration>("/root/Configuration");
     zombieTemplate = GD.Load<PackedScene>("res://Scenes/Enemies/Zombie/Zombie.tscn");
 
-    // AddSphere(new Vector3(15, 1f, 0));
+    AddSphere(new Vector3(15, 1f, 15));
     // AddSphere(new Vector3(20, 1f, 0));
     // AddSphere(new Vector3(15, 1f, 5));
     // AddSphere(new Vector3(15, 1f, -5));
