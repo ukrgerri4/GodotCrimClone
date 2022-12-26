@@ -10,7 +10,7 @@ public class Zombie : KinematicBody
 
   public override void _Ready()
   {
-    _player = GetNode<Player>("/root/Main/Player");
+    // _player = GetNode<Player>("/root/Main/Player");
     _meshInstance = GetNode<MeshInstance>("MeshInstance");
   }
 
@@ -20,11 +20,11 @@ public class Zombie : KinematicBody
 
     if (OS.IsDebugBuild() && Input.IsKeyPressed((int)KeyList.E))
     {
-      MoveAndSlide(GlobalTranslation.DirectionTo(_player.GlobalTranslation).Normalized() * _speed * 10);
+      MoveAndSlide(GlobalTranslation.DirectionTo(_player?.GlobalTranslation ?? Vector3.Zero).Normalized() * _speed * 10);
     }
     else
     {
-      MoveAndSlide(GlobalTranslation.DirectionTo(_player.GlobalTranslation).Normalized() * _speed);
+      MoveAndSlide(GlobalTranslation.DirectionTo(_player?.GlobalTranslation ?? Vector3.Zero).Normalized() * _speed);
     }
   }
 

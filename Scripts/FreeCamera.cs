@@ -10,10 +10,6 @@ public class FreeCamera : Camera
   private Vector3 rotation = Vector3.Zero;
   private Vector3 velocity = Vector3.Zero;
 
-  // private bool IsMouseModeCuptured => Input.MouseMode == Input.MouseModeEnum.Captured;
-
-  private Player player;
-
   public override void _Ready()
   {
     configuration = GetNode<Configuration>("/root/Configuration");
@@ -22,7 +18,6 @@ public class FreeCamera : Camera
       Current = @event.CameraMode == CameraMode.FreeView ? true : false;
     };
 
-    player = GetNode<Player>("/root/Main/Player");
     rotation = Rotation;
   }
 
@@ -55,9 +50,6 @@ public class FreeCamera : Camera
     velocity += MOVE_SPEED * delta * Transform.basis.Xform(motion);
     velocity *= 0.85f;
     Translation += velocity;
-
-    // Translation = new Vector3(player.Translation.x - 5, player.Translation.y + 4, player.Translation.z);
-    // LookAt(player.Translation, Vector3.Up);
   }
 
   private bool IsCameraMovementDisabled()

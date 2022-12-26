@@ -5,6 +5,7 @@ public class Player : KinematicBody
 {
   public delegate void WeaponChanged(WeaponChangedEvent @event);
   public event WeaponChanged OnWeaponChanged;
+  public int JoyId { get; set; } = 0;
 
   private WeaponsWarehouse _weaponsWarehouse;
   private CursorEventManager _cursorEventManager;
@@ -12,14 +13,14 @@ public class Player : KinematicBody
   private Weapon _weapon;
   private PerspectiveCamera _perspectiveCamera;
   private OrthogonalCamera _orthogonalCamera;
-  private Tween _tween;
-  private Vector3 _lookAtPosition = Vector3.Zero;
+  private Vector3 _lookAtPosition;
 
   private bool IsMouseModeVisible => Input.MouseMode == Input.MouseModeEnum.Visible;
   private float CameraRotation => _perspectiveCamera.Current ? _perspectiveCamera.GlobalRotation.y : _orthogonalCamera.GlobalRotation.y;
 
   public override void _Ready()
   {
+    _lookAtPosition = new Vector3(0, Translation.y, 0);
     _weaponsWarehouse = GetNode<WeaponsWarehouse>("/root/WeaponsWarehouse");
     EquipWeapon();
 
@@ -31,7 +32,6 @@ public class Player : KinematicBody
 
     _perspectiveCamera = GetNode<PerspectiveCamera>("PerspectiveCamera");
     _orthogonalCamera = GetNode<OrthogonalCamera>("OrthogonalCamera");
-    _tween = GetNode<Tween>("Tween");
   }
 
   public override void _PhysicsProcess(float delta)
@@ -46,7 +46,7 @@ public class Player : KinematicBody
     }
     else
     {
-      Move(delta);
+      Move3(delta);
       LookByJoy(delta);
     }
   }
@@ -59,11 +59,11 @@ public class Player : KinematicBody
       return;
     }
 
-    if (Input.IsActionPressed("ui_accept"))
+    if (Input.IsActionPressed("fire"))
     {
       _weapon.StartShooting();
     }
-    else if (Input.IsActionJustReleased("ui_accept"))
+    else if (Input.IsActionJustReleased("fire"))
     {
       _weapon.StopShooting();
     }
@@ -84,29 +84,60 @@ public class Player : KinematicBody
     }
   }
 
+  private void Move2(float delta)
+  {
+    Vector2 velocity = Input.GetVector("move_left", "move_right", "move_forward", "move_backward");
+
+    if (velocity.LengthSquared() > 0)
+    {
+      var motion = new Vector3(velocity.x, 0, velocity.y);
+
+      motion = motion.Normalized().Rotated(Vector3.Up, CameraRotation);
+      motion.y = Translation.y;
+
+      MoveAndSlide(motion * 10);
+    }
+  }
+
+  private void Move3(float delta)
+  {
+    Vector2 velocity = new Vector2(
+      Input.GetJoyAxis(JoyId, (int)JoystickList.Axis0),
+      Input.GetJoyAxis(JoyId, (int)JoystickList.Axis1)
+    );
+
+    if (velocity.LengthSquared() > 0.05)
+    {
+      var motion = new Vector3(velocity.x, 0, velocity.y);
+
+      motion = motion.Normalized().Rotated(Vector3.Up, CameraRotation);
+      motion.y = Translation.y;
+
+      MoveAndSlide(motion * 10);
+    }
+  }
+
   private void LookByJoy(float delta)
   {
-    var lookX = Input.GetActionStrength("look_right") - Input.GetActionStrength("look_left");
-    var lookZ = Input.GetActionStrength("look_backward") - Input.GetActionStrength("look_forward");
+    // Vector2 velocity = Input.GetVector("look_left", "look_right", "look_forward", "look_backward");
+    Vector2 velocity = new Vector2(
+      Input.GetJoyAxis(JoyId, (int)JoystickList.Axis2),
+      Input.GetJoyAxis(JoyId, (int)JoystickList.Axis3)
+    );
 
-    if (lookX != 0 || lookZ != 0)
+    // used LengthSquared() because it runs faster than Length()
+    // TODO: improve aiming!!!
+    if (velocity.LengthSquared() > 0.9f)
     {
-      var a = new Vector2(lookX, lookZ).Rotated(Mathf.Deg2Rad(90)).Rotated(CameraRotation).Angle();
-      var m = new Vector3(lookX, Translation.y, lookZ);
-      // GD.Print($"[{lookX}:{lookZ}:{Mathf.Rad2Deg(a)}:{m}]");
-
-      // LookAt(m, Vector3.Up);
-
-      _tween.StopAll();
-      _tween.InterpolateProperty(this, "rotation:y", Rotation.y, -1 * a, 0.05f, Tween.TransitionType.Quad, Tween.EaseType.Out);
-      _tween.Start();
-
-      // _lookAtPosition = new Vector3(
-      //   Input.GetActionStrength("look_right") - Input.GetActionStrength("look_left"),
-      //   Translation.y,
-      //   Input.GetActionStrength("look_backward") - Input.GetActionStrength("look_forward")
-      // );
-      // Rotation = m;
+      var angle = velocity.Rotated(Mathf.Deg2Rad(90)).Rotated(CameraRotation).Angle();
+      Rotation = new Vector3(Rotation.x, Mathf.LerpAngle(Rotation.y, -1 * angle, 0.2f), Rotation.z);
+      // Rotation = new Vector3(Rotation.x, -1 * angle, Rotation.z);
+    }
+    else if (velocity.LengthSquared() > 0.25f)
+    {
+      var angle = velocity.Rotated(Mathf.Deg2Rad(90)).Rotated(CameraRotation).Angle();
+      Rotation = new Vector3(Rotation.x, Mathf.LerpAngle(Rotation.y, -1 * angle, 0.7f), Rotation.z);
+      // Rotation = new Vector3(Rotation.x, -1 * angle, Rotation.z);
     }
   }
 

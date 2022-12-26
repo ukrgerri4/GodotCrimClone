@@ -30,6 +30,8 @@ public class Configuration : Node
 
   public override void _Ready()
   {
+    Input.Singleton.Connect("joy_connection_changed", this, nameof(OnJoyConnectionChanged));
+
     if (OS.IsDebugBuild())
     {
       var screenSize = OS.GetScreenSize(0);
@@ -95,5 +97,10 @@ public class Configuration : Node
   {
     var nextCameraMode = ((int)CameraMode + 1) % 3;
     CameraMode = (CameraMode)nextCameraMode;
+  }
+
+  private void OnJoyConnectionChanged(int device, bool connected, string name, string guid)
+  {
+    // TODO: implement
   }
 }

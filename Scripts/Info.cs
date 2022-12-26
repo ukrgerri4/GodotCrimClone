@@ -24,7 +24,7 @@ public class Info : VBoxContainer
 
     InitFpsTimer();
     InitConfiguration();
-    InitPlayerEvents();
+    // InitPlayerEvents();
     // InitCursorEventManager();
   }
 
