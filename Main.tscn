@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://Scripts/Draw.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/FreeCamera.cs" type="Script" id=2]
@@ -9,7 +9,20 @@
 [ext_resource path="res://Scripts/Info.cs" type="Script" id=7]
 [ext_resource path="res://Scripts/MouseRayArea.cs" type="Script" id=8]
 [ext_resource path="res://Scenes/Components/SpiderRock/SpiderRock.tscn" type="PackedScene" id=9]
-[ext_resource path="res://Scenes/Components/Fog/Fog.tscn" type="PackedScene" id=10]
+
+[sub_resource type="ProceduralSky" id=9]
+
+[sub_resource type="Environment" id=10]
+background_mode = 2
+background_sky = SubResource( 9 )
+background_camera_feed_id = 7
+fog_depth_begin = 100.0
+fog_depth_end = 150.0
+ssao_radius = 8.26
+ssao_intensity = 99.04
+dof_blur_near_amount = 0.0
+adjustment_contrast = 8.0
+adjustment_saturation = 0.01
 
 [sub_resource type="BoxShape" id=1]
 
@@ -37,6 +50,9 @@ albedo_color = Color( 0, 0, 0, 1 )
 
 [node name="Main" type="Spatial"]
 script = ExtResource( 3 )
+
+[node name="Environment" type="WorldEnvironment" parent="."]
+environment = SubResource( 10 )
 
 [node name="Info" type="VBoxContainer" parent="."]
 margin_right = 104.0
@@ -131,6 +147,7 @@ transform = Transform( 0.0407523, 0, 0, 0, 0.0407523, 0, 0, 0, 0.0407523, -11.45
 transform = Transform( 0.0407523, 0, 0, 0, 0.0407523, 0, 0, 0, 0.0407523, 8.88591, 0.802068, -1.15486 )
 
 [node name="ViewportContainer" type="ViewportContainer" parent="."]
+visible = false
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -640.0
@@ -142,10 +159,8 @@ stretch = true
 [node name="Viewport" type="Viewport" parent="ViewportContainer"]
 size = Vector2( 640, 1080 )
 handle_input_locally = false
-render_target_update_mode = 3
+render_target_update_mode = 0
 gui_disable_input = true
-
-[node name="Fog" parent="." instance=ExtResource( 10 )]
 
 [connection signal="input_event" from="Floor" to="Floor" method="_on_Floor_input_event"]
 [connection signal="body_entered" from="PruneArea" to="PruneArea" method="_on_PruneArea_body_entered"]
