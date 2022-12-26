@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Scripts/Draw.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/FreeCamera.cs" type="Script" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://Scripts/Info.cs" type="Script" id=7]
 [ext_resource path="res://Scripts/MouseRayArea.cs" type="Script" id=8]
 [ext_resource path="res://Scenes/Components/SpiderRock/SpiderRock.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Scenes/Components/Fog/Fog.tscn" type="PackedScene" id=10]
 
 [sub_resource type="BoxShape" id=1]
 
@@ -143,6 +144,8 @@ size = Vector2( 640, 1080 )
 handle_input_locally = false
 render_target_update_mode = 3
 gui_disable_input = true
+
+[node name="Fog" parent="." instance=ExtResource( 10 )]
 
 [connection signal="input_event" from="Floor" to="Floor" method="_on_Floor_input_event"]
 [connection signal="body_entered" from="PruneArea" to="PruneArea" method="_on_PruneArea_body_entered"]
