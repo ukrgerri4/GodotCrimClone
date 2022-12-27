@@ -7,11 +7,13 @@ public class Zombie : KinematicBody
   private float _healthPoints = 50f;
   private Player _player;
   private MeshInstance _meshInstance;
+  private ShakeCamera _shake;
 
   public override void _Ready()
   {
     // _player = GetNode<Player>("/root/Main/Player");
     _meshInstance = GetNode<MeshInstance>("MeshInstance");
+    _shake = GetNode<ShakeCamera>("/root/ShakeCamera");
   }
 
   public override void _PhysicsProcess(float delta)
@@ -33,6 +35,7 @@ public class Zombie : KinematicBody
     _healthPoints -= damage;
     if (_healthPoints <= 0)
     {
+      _shake.AddTrauma(0.25f);
       QueueFree();
     }
     else
@@ -40,29 +43,5 @@ public class Zombie : KinematicBody
       // HealthBarUpdate(_healthPoints);
     }
     return _healthPoints;
-  }
-
-  private void _on_KinematicBody_mouse_entered() {
-    _meshInstance.Hide();
-  }
-
-  private void _on_KinematicBody_mouse_exited() {
-    _meshInstance.Show();
-  }
-
-  private void _on_KinematicBody_input_event(Camera camera, InputEvent @event, Vector3 position, Vector3 normal, int shape_idx)
-  {
-    GD.Print("DRag");
-    // if (/*camera is FreeCamera &&*/ @event is InputEventMouseMotion eventMouseMotion)
-    // {
-    //   _cursorEventManager.NotifyPositionChanged(
-    //     new CursorPositionChangedEvent
-    //     {
-    //       Position = position,
-    //       Normal = normal,
-    //       ShapeIdx = shape_idx
-    //     }
-    //   );
-    // }
   }
 }

@@ -20,6 +20,7 @@ Configuration="*res://Singletons/Configuration.cs"
 BulletEventManager="*res://Singletons/BulletEventManager.cs"
 CursorEventManager="*res://Singletons/CursorEventManager.cs"
 WeaponsWarehouse="*res://Singletons/WeaponsWarehouse.cs"
+ShakeCamera="*res://Singletons/ShakeCamera.cs"
 
 [display]
 

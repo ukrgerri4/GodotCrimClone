@@ -18,8 +18,7 @@ background_sky = SubResource( 9 )
 background_camera_feed_id = 7
 fog_depth_begin = 100.0
 fog_depth_end = 150.0
-ssao_radius = 8.26
-ssao_intensity = 99.04
+dof_blur_far_amount = 0.3
 dof_blur_near_amount = 0.0
 adjustment_contrast = 8.0
 adjustment_saturation = 0.01
@@ -136,7 +135,7 @@ far = 250.0
 script = ExtResource( 5 )
 
 [node name="PerspectiveCamera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 88, -20 )
+transform = Transform( -1, 8.51821e-08, -1.96658e-08, 0, 0.224951, 0.97437, 8.74228e-08, 0.97437, -0.224951, 0, 88, -20 )
 current = true
 fov = 20.0
 near = 1.0
@@ -155,6 +154,8 @@ transform = Transform( 0.0407523, 0, 0, 0, 0.0407523, 0, 0, 0, 0.0407523, 8.8859
 material_override = SubResource( 8 )
 material_overlay = SubResource( 7 )
 script = ExtResource( 1 )
+
+[node name="Tween" type="Tween" parent="."]
 
 [node name="ViewportContainer" type="ViewportContainer" parent="."]
 visible = false
