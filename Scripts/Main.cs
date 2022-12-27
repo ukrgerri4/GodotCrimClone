@@ -1,6 +1,4 @@
 using Godot;
-using System;
-using System.Threading.Tasks;
 
 public class Main : Spatial
 {
@@ -20,14 +18,20 @@ public class Main : Spatial
     // AddSphere(new Vector3(15, 1f, 5));
     // AddSphere(new Vector3(15, 1f, -5));
 
-    var palyer = _playerTemplate.Instance<Player>();
-    palyer.Translation = new Vector3(0,1,0);
-    AddChild(palyer);
+    // var palyer = _playerTemplate.Instance<Player>();
+    // palyer.Translation = new Vector3(0,1,0);
+    // AddChild(palyer);
 
-    var palyer2 = _playerTemplate.Instance<Player>();
-    palyer2.Translation = new Vector3(3,1,3);
-    palyer2.JoyId = 1;
-    AddChild(palyer2);
+    // var palyer2 = _playerTemplate.Instance<Player>();
+    // palyer2.Translation = new Vector3(3,1,3);
+    // palyer2.JoyId = 1;
+    // AddChild(palyer2);
+
+    AddPlayer(_configuration.PlayersOptions.Player0);
+    AddPlayer(_configuration.PlayersOptions.Player1);
+    AddPlayer(_configuration.PlayersOptions.Player2);
+    AddPlayer(_configuration.PlayersOptions.Player3);
+    AddPlayer(_configuration.PlayersOptions.Player4);
   }
 
   public override void _Process(float delta)
@@ -52,5 +56,13 @@ public class Main : Spatial
     var zombie = _zombieTemplate.Instance<Zombie>();
     zombie.Translation = position;
     AddChild(zombie);
+  }
+
+  private void AddPlayer(PlayerDefaultOptions playerOptions)
+  {
+    var palyer = _playerTemplate.Instance<Player>();
+    palyer.Translation = playerOptions.AppearPosition;
+    palyer.JoyPadId = playerOptions.JoyPadId;
+    AddChild(palyer);
   }
 }

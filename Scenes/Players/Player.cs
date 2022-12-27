@@ -5,7 +5,7 @@ public class Player : KinematicBody
 {
   public delegate void WeaponChanged(WeaponChangedEvent @event);
   public event WeaponChanged OnWeaponChanged;
-  public int JoyId { get; set; } = 0;
+  public int JoyPadId { get; set; } = 0;
 
   private WeaponsWarehouse _weaponsWarehouse;
   private CursorEventManager _cursorEventManager;
@@ -31,7 +31,7 @@ public class Player : KinematicBody
 
   public override void _PhysicsProcess(float delta)
   {
-    if (Input.MouseMode.IsVisible())
+    if (Input.MouseMode.IsVisible() && JoyPadId == -1)
     {
       MoveUniversal(delta);
       if (GlobalTranslation.x != _lookAtPosition.x && GlobalTranslation.z != _lookAtPosition.z)
@@ -48,19 +48,37 @@ public class Player : KinematicBody
 
   public override void _Input(InputEvent @event)
   {
-    if (Input.IsActionJustPressed("next_weapon"))
+    if (JoyPadId == -1)
     {
-      NextWeapon();
-      return;
+      if (Input.IsActionJustPressed("next_weapon"))
+      {
+        NextWeapon();
+        return;
+      }
+      if (Input.IsActionPressed("fire"))
+      {
+        _weapon.StartShooting();
+      }
+      else if (Input.IsActionJustReleased("fire"))
+      {
+        _weapon.StopShooting();
+      }
     }
-
-    if (Input.IsActionPressed("fire"))
+    else
     {
-      _weapon.StartShooting();
-    }
-    else if (Input.IsActionJustReleased("fire"))
-    {
-      _weapon.StopShooting();
+      if (Input.IsJoyButtonPressed(JoyPadId, (int)JoystickList.Button6))
+      {
+        NextWeapon();
+        return;
+      }
+      if (Input.IsJoyButtonPressed(JoyPadId, (int)JoystickList.Button7))
+      {
+        _weapon.StartShooting();
+      }
+      else
+      {
+        _weapon.StopShooting();
+      }
     }
   }
 
@@ -82,8 +100,8 @@ public class Player : KinematicBody
   private void MoveByJoy(float delta)
   {
     Vector2 velocity = new Vector2(
-      Input.GetJoyAxis(JoyId, (int)JoystickList.Axis0),
-      Input.GetJoyAxis(JoyId, (int)JoystickList.Axis1)
+      Input.GetJoyAxis(JoyPadId, (int)JoystickList.Axis0),
+      Input.GetJoyAxis(JoyPadId, (int)JoystickList.Axis1)
     );
 
     if (velocity.LengthSquared() > 0.05)
@@ -100,8 +118,8 @@ public class Player : KinematicBody
   private void LookByJoy(float delta)
   {
     Vector2 velocity = new Vector2(
-      Input.GetJoyAxis(JoyId, (int)JoystickList.Axis2),
-      Input.GetJoyAxis(JoyId, (int)JoystickList.Axis3)
+      Input.GetJoyAxis(JoyPadId, (int)JoystickList.Axis2),
+      Input.GetJoyAxis(JoyPadId, (int)JoystickList.Axis3)
     );
 
     // used LengthSquared() because it runs faster than Length()
