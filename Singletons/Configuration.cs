@@ -138,7 +138,7 @@ public class Configuration : Node
     CameraMode = (CameraMode)nextCameraMode;
   }
 
-  private void OnJoyConnectionChanged(int device, bool connected, string name, string guid)
+  private void OnJoyConnectionChanged(int device, bool connected)
   {
     // TODO: implement
   }

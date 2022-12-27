@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 
 public class Main : Spatial
@@ -5,6 +6,8 @@ public class Main : Spatial
   private Configuration _configuration;
   private PackedScene _zombieTemplate;
   private PackedScene _playerTemplate;
+  private List<Player> _players;
+
   private int count = 0;
 
   public override void _Ready()
@@ -17,15 +20,6 @@ public class Main : Spatial
     // AddSphere(new Vector3(20, 1f, 0));
     // AddSphere(new Vector3(15, 1f, 5));
     // AddSphere(new Vector3(15, 1f, -5));
-
-    // var palyer = _playerTemplate.Instance<Player>();
-    // palyer.Translation = new Vector3(0,1,0);
-    // AddChild(palyer);
-
-    // var palyer2 = _playerTemplate.Instance<Player>();
-    // palyer2.Translation = new Vector3(3,1,3);
-    // palyer2.JoyId = 1;
-    // AddChild(palyer2);
 
     AddPlayer(_configuration.PlayersOptions.Player0);
     AddPlayer(_configuration.PlayersOptions.Player1);
@@ -43,6 +37,15 @@ public class Main : Spatial
       count = 0;
     }
   }
+
+  public override void _Input(InputEvent @event)
+  {
+    if (@event is InputEventJoypadButton joypadButtonEvent)
+    {
+      if (joypadButtonEvent.Device )
+    }
+  }
+
   private void AddSphere()
   {
     var zombie = _zombieTemplate.Instance<KinematicBody>();
@@ -64,5 +67,6 @@ public class Main : Spatial
     palyer.Translation = playerOptions.AppearPosition;
     palyer.JoyPadId = playerOptions.JoyPadId;
     AddChild(palyer);
+    _players.Add(palyer);
   }
 }
