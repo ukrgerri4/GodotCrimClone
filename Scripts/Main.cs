@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Timers;
 using Godot;
 
 public class Main : Spatial
@@ -9,23 +12,29 @@ public class Main : Spatial
   private List<Player> _players;
 
   private int count = 0;
-
   public override void _Ready()
   {
     _configuration = GetNode<Configuration>("/root/Configuration");
     _zombieTemplate = GD.Load<PackedScene>("res://Scenes/Enemies/Zombie/Zombie.tscn");
     _playerTemplate = GD.Load<PackedScene>("res://Scenes/Players/Player.tscn");
+    _players = new List<Player>();
 
     // AddSphere(new Vector3(15, 1f, 15));
     // AddSphere(new Vector3(20, 1f, 0));
     // AddSphere(new Vector3(15, 1f, 5));
     // AddSphere(new Vector3(15, 1f, -5));
 
-    AddPlayer(_configuration.PlayersOptions.Player0);
-    AddPlayer(_configuration.PlayersOptions.Player1);
-    AddPlayer(_configuration.PlayersOptions.Player2);
-    AddPlayer(_configuration.PlayersOptions.Player3);
-    AddPlayer(_configuration.PlayersOptions.Player4);
+    CallDeferred(nameof(AddPlayerByJoypadId), -1);
+
+    var timer = new System.Timers.Timer();
+    timer.Interval = TimeSpan.FromSeconds(10).TotalMilliseconds;
+    timer.AutoReset = false;
+    timer.Elapsed += (object sender, ElapsedEventArgs e) =>
+    {
+      SetProcessInput(false);
+      timer.Dispose();
+    };
+    timer.Start();
   }
 
   public override void _Process(float delta)
@@ -42,7 +51,11 @@ public class Main : Spatial
   {
     if (@event is InputEventJoypadButton joypadButtonEvent)
     {
-      if (joypadButtonEvent.Device )
+      GD.Print(joypadButtonEvent.Device);
+      if (!_players.Any(x => x.JoyPadId == joypadButtonEvent.Device))
+      {
+        CallDeferred(nameof(AddPlayerByJoypadId), joypadButtonEvent.Device);
+      }
     }
   }
 
@@ -61,8 +74,10 @@ public class Main : Spatial
     AddChild(zombie);
   }
 
-  private void AddPlayer(PlayerDefaultOptions playerOptions)
+  private void AddPlayerByJoypadId(int joypadId)
   {
+    var playerOptions = _configuration.PlayersOptions.First(x => x.JoyPadId == joypadId);
+    GD.Print(playerOptions.Name);
     var palyer = _playerTemplate.Instance<Player>();
     palyer.Translation = playerOptions.AppearPosition;
     palyer.JoyPadId = playerOptions.JoyPadId;

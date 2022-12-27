@@ -136,14 +136,14 @@ far = 250.0
 script = ExtResource( 5 )
 
 [node name="PerspectiveCamera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 110, -25 )
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 88, -20 )
 current = true
 fov = 20.0
-far = 150.0
+near = 1.0
 script = ExtResource( 6 )
 
 [node name="SpiderRock" parent="." instance=ExtResource( 9 )]
-transform = Transform( 0.267856, 0, 0, 0, 0.267856, 0, 0, 0, 0.267856, -19.3914, 5.18838, -17.7521 )
+transform = Transform( 0.267856, 0, 0, 0, 0.267856, 0, 0, 0, 0.267856, 14.5442, 5.18838, 13.9521 )
 
 [node name="SpiderRock2" parent="." instance=ExtResource( 9 )]
 transform = Transform( 0.0407523, 0, 0, 0, 0.0407523, 0, 0, 0, 0.0407523, -11.4558, 0.866596, -1.15486 )

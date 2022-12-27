@@ -51,11 +51,10 @@ public class Player : KinematicBody
     {
       if (Input.IsActionJustPressed("next_weapon"))
       {
-        GD.Print("CHanged");
         NextWeapon();
         return;
       }
-      
+
       if (Input.IsActionPressed("fire"))
       {
         _weapon.StartShooting();
@@ -69,7 +68,6 @@ public class Player : KinematicBody
     {
       if (Input.IsJoyButtonPressed(JoyPadId, (int)JoystickList.Button6))
       {
-        GD.Print("CHanged");
         NextWeapon();
         return;
       }

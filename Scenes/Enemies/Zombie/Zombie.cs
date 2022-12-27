@@ -49,4 +49,20 @@ public class Zombie : KinematicBody
   private void _on_KinematicBody_mouse_exited() {
     _meshInstance.Show();
   }
+
+  private void _on_KinematicBody_input_event(Camera camera, InputEvent @event, Vector3 position, Vector3 normal, int shape_idx)
+  {
+    GD.Print("DRag");
+    // if (/*camera is FreeCamera &&*/ @event is InputEventMouseMotion eventMouseMotion)
+    // {
+    //   _cursorEventManager.NotifyPositionChanged(
+    //     new CursorPositionChangedEvent
+    //     {
+    //       Position = position,
+    //       Normal = normal,
+    //       ShapeIdx = shape_idx
+    //     }
+    //   );
+    // }
+  }
 }

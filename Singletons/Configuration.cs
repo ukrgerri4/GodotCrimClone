@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 public class Configuration : Node
@@ -7,7 +8,7 @@ public class Configuration : Node
   public delegate void MouseCaptionChanged(CameraModeChangedEvent cameraMode);
   public event MouseCaptionChanged OnMouseCaptionChanged;
   private CameraMode _cameraMode;
-  public PlayersOptions PlayersOptions { get; set; }
+  public List<PlayerDefaultOptions> PlayersOptions { get; set; }
 
   public CameraMode CameraMode
   {
@@ -65,33 +66,33 @@ public class Configuration : Node
 
   private void InitPlayerDefaults()
   {
-    PlayersOptions = new PlayersOptions
+    PlayersOptions = new List<PlayerDefaultOptions>
     {
-      Player0 = new PlayerDefaultOptions
+      new PlayerDefaultOptions
       {
         Name = "Trooper0",
         AppearPosition = new Vector3(0, 1, 0),
         JoyPadId = -1
       },
-      Player1 = new PlayerDefaultOptions
+      new PlayerDefaultOptions
       {
         Name = "Trooper1",
         AppearPosition = new Vector3(3, 1, 0),
         JoyPadId = 0
       },
-      Player2 = new PlayerDefaultOptions
+      new PlayerDefaultOptions
       {
         Name = "Trooper2",
         AppearPosition = new Vector3(0, 1, 3),
         JoyPadId = 1
       },
-      Player3 = new PlayerDefaultOptions
+      new PlayerDefaultOptions
       {
         Name = "Trooper3",
         AppearPosition = new Vector3(-3, 1, 0),
         JoyPadId = 2
       },
-      Player4 = new PlayerDefaultOptions
+      new PlayerDefaultOptions
       {
         Name = "Trooper4",
         AppearPosition = new Vector3(0, 1, -3),
@@ -102,7 +103,7 @@ public class Configuration : Node
 
   public override void _Input(InputEvent @event)
   {
-    if (Input.IsActionJustPressed("ui_cancel"))
+    if (Input.IsActionJustPressed("exit"))
     {
       GetTree().Quit();
     }
