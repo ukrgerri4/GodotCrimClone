@@ -11,12 +11,10 @@ public class Player : KinematicBody
   private CursorEventManager _cursorEventManager;
 
   private Weapon _weapon;
-  private PerspectiveCamera _perspectiveCamera;
-  private OrthogonalCamera _orthogonalCamera;
   private Vector3 _lookAtPosition;
 
   private bool IsMouseModeVisible => Input.MouseMode == Input.MouseModeEnum.Visible;
-  private float CameraRotation => _perspectiveCamera.Current ? _perspectiveCamera.GlobalRotation.y : _orthogonalCamera.GlobalRotation.y;
+  private float CameraRotationY => GetViewport().GetCamera()?.GlobalRotation.y ?? 0;
 
   public override void _Ready()
   {
@@ -29,16 +27,13 @@ public class Player : KinematicBody
     {
       _lookAtPosition = new Vector3(@event.Position.x, Translation.y, @event.Position.z);
     });
-
-    _perspectiveCamera = GetNode<PerspectiveCamera>("PerspectiveCamera");
-    _orthogonalCamera = GetNode<OrthogonalCamera>("OrthogonalCamera");
   }
 
   public override void _PhysicsProcess(float delta)
   {
     if (Input.MouseMode.IsVisible())
     {
-      Move(delta);
+      MoveUniversal(delta);
       if (GlobalTranslation.x != _lookAtPosition.x && GlobalTranslation.z != _lookAtPosition.z)
       {
         LookAt(_lookAtPosition, Vector3.Up);
@@ -46,7 +41,7 @@ public class Player : KinematicBody
     }
     else
     {
-      Move3(delta);
+      MoveByJoy(delta);
       LookByJoy(delta);
     }
   }
@@ -69,22 +64,7 @@ public class Player : KinematicBody
     }
   }
 
-  private void Move(float delta)
-  {
-    var moveX = Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left");
-    var moveZ = Input.GetActionStrength("move_backward") - Input.GetActionStrength("move_forward");
-
-    if (moveX != 0 || moveZ != 0)
-    {
-      var motion = new Vector3(moveX, 0, moveZ);
-
-      motion = motion.Normalized().Rotated(Vector3.Up, CameraRotation);
-
-      MoveAndSlide(motion * 10);
-    }
-  }
-
-  private void Move2(float delta)
+  private void MoveUniversal(float delta)
   {
     Vector2 velocity = Input.GetVector("move_left", "move_right", "move_forward", "move_backward");
 
@@ -92,14 +72,14 @@ public class Player : KinematicBody
     {
       var motion = new Vector3(velocity.x, 0, velocity.y);
 
-      motion = motion.Normalized().Rotated(Vector3.Up, CameraRotation);
+      motion = motion.Normalized().Rotated(Vector3.Up, CameraRotationY);
       motion.y = Translation.y;
 
       MoveAndSlide(motion * 10);
     }
   }
 
-  private void Move3(float delta)
+  private void MoveByJoy(float delta)
   {
     Vector2 velocity = new Vector2(
       Input.GetJoyAxis(JoyId, (int)JoystickList.Axis0),
@@ -110,7 +90,7 @@ public class Player : KinematicBody
     {
       var motion = new Vector3(velocity.x, 0, velocity.y);
 
-      motion = motion.Normalized().Rotated(Vector3.Up, CameraRotation);
+      motion = motion.Normalized().Rotated(Vector3.Up, CameraRotationY);
       motion.y = Translation.y;
 
       MoveAndSlide(motion * 10);
@@ -119,7 +99,6 @@ public class Player : KinematicBody
 
   private void LookByJoy(float delta)
   {
-    // Vector2 velocity = Input.GetVector("look_left", "look_right", "look_forward", "look_backward");
     Vector2 velocity = new Vector2(
       Input.GetJoyAxis(JoyId, (int)JoystickList.Axis2),
       Input.GetJoyAxis(JoyId, (int)JoystickList.Axis3)
@@ -129,13 +108,14 @@ public class Player : KinematicBody
     // TODO: improve aiming!!!
     if (velocity.LengthSquared() > 0.9f)
     {
-      var angle = velocity.Rotated(Mathf.Deg2Rad(90)).Rotated(CameraRotation).Angle();
+      // Mathf.Deg2Rad(90) = 1.570796
+      var angle = velocity.Rotated(Mathf.Deg2Rad(90)).Rotated(CameraRotationY).Angle();
       Rotation = new Vector3(Rotation.x, Mathf.LerpAngle(Rotation.y, -1 * angle, 0.2f), Rotation.z);
       // Rotation = new Vector3(Rotation.x, -1 * angle, Rotation.z);
     }
     else if (velocity.LengthSquared() > 0.25f)
     {
-      var angle = velocity.Rotated(Mathf.Deg2Rad(90)).Rotated(CameraRotation).Angle();
+      var angle = velocity.Rotated(Mathf.Deg2Rad(90)).Rotated(CameraRotationY).Angle();
       Rotation = new Vector3(Rotation.x, Mathf.LerpAngle(Rotation.y, -1 * angle, 0.7f), Rotation.z);
       // Rotation = new Vector3(Rotation.x, -1 * angle, Rotation.z);
     }

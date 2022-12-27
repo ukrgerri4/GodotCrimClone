@@ -1,8 +1,6 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Textures/Accepted/clipart886585.png" type="Texture" id=1]
-[ext_resource path="res://Scenes/Players/PerspectiveCamera.cs" type="Script" id=2]
-[ext_resource path="res://Scenes/Players/OrthogonalCamera.cs" type="Script" id=3]
 [ext_resource path="res://Scenes/Players/Player.cs" type="Script" id=4]
 
 [sub_resource type="CylinderShape" id=1]
@@ -31,29 +29,14 @@ shape = SubResource( 1 )
 transform = Transform( 0.5, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0 )
 mesh = SubResource( 2 )
 
-[node name="PerspectiveCamera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 110, -25 )
-current = true
-fov = 20.0
-far = 150.0
-script = ExtResource( 2 )
-
-[node name="OrthogonalCamera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 100, 100 )
-projection = 1
-current = true
-size = 45.0
-far = 250.0
-script = ExtResource( 3 )
-
 [node name="RayCast" type="RayCast" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -1 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1 )
 enabled = true
 cast_to = Vector3( 0, 0.5, -50 )
 collision_mask = 6
 debug_shape_thickness = 1
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
-transform = Transform( 0.2, 0, 0, 0, -8.74228e-09, -0.2, 0, 0.2, -8.74228e-09, 0, 0.5, -5 )
+transform = Transform( 0.2, 0, 0, 0, -8.74228e-09, -0.2, 0, 0.2, -8.74228e-09, 0, 0, -5 )
 billboard = 1
 texture = ExtResource( 1 )

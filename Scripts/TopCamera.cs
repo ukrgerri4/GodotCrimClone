@@ -1,9 +1,9 @@
 using Godot;
 using System;
 
-public class FreeCamera : Camera
+public class TopCamera : Camera
 {
-  private Configuration configuration;
+  private Configuration _configuration;
   private const float MOUSE_SENSITIVITY = 0.002f;
   private const float MOVE_SPEED = 15f;
 
@@ -12,8 +12,8 @@ public class FreeCamera : Camera
 
   public override void _Ready()
   {
-    configuration = GetNode<Configuration>("/root/Configuration");
-    configuration.OnMouseCaptionChanged += (CameraModeChangedEvent @event) =>
+    _configuration = GetNode<Configuration>("/root/Configuration");
+    _configuration.OnMouseCaptionChanged += (CameraModeChangedEvent @event) =>
     {
       Current = @event.CameraMode == CameraMode.FreeView ? true : false;
     };
