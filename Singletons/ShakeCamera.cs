@@ -7,9 +7,9 @@ public class ShakeCamera : Node
   private Camera _camera;
   private Vector3 _initialCameraRotationDegrees;
 
-  private float _maxX = 10.0f;
-  private float _maxY = 10.0f;
-  private float _maxZ = 5.0f;
+  private float _maxX = 5.0f;
+  private float _maxY = 5.0f;
+  private float _maxZ = 2.5f;
 
   private float _noiseSpeed = 50.0f;
 

@@ -35,7 +35,7 @@ public class Zombie : KinematicBody
     _healthPoints -= damage;
     if (_healthPoints <= 0)
     {
-      _shake.AddTrauma(0.25f);
+      _shake.AddTrauma(0.5f);
       QueueFree();
     }
     else
