@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Scripts/Draw.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/TopCamera.cs" type="Script" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://Scripts/Info.cs" type="Script" id=7]
 [ext_resource path="res://Scripts/MouseRayArea.cs" type="Script" id=8]
 [ext_resource path="res://Scenes/Components/SpiderRock/SpiderRock.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Tests/ForceField/ForceField.tscn" type="PackedScene" id=10]
 
 [sub_resource type="ProceduralSky" id=9]
 
@@ -142,7 +143,7 @@ near = 1.0
 script = ExtResource( 6 )
 
 [node name="SpiderRock" parent="." instance=ExtResource( 9 )]
-transform = Transform( 0.267856, 0, 0, 0, 0.267856, 0, 0, 0, 0.267856, 14.5442, 5.18838, 13.9521 )
+transform = Transform( 0.123285, 0, 0, 0, 0.123285, 0, 0, 0, 0.123285, 14.5442, 2.50296, 13.9521 )
 
 [node name="SpiderRock2" parent="." instance=ExtResource( 9 )]
 transform = Transform( 0.0407523, 0, 0, 0, 0.0407523, 0, 0, 0, 0.0407523, -11.4558, 0.866596, 12.4547 )
@@ -172,6 +173,9 @@ size = Vector2( 640, 1080 )
 handle_input_locally = false
 render_target_update_mode = 0
 gui_disable_input = true
+
+[node name="ForceField" parent="." instance=ExtResource( 10 )]
+transform = Transform( 4.02319, 0, 0, 0, 4.02319, 0, 0, 0, 4.02319, 13.4641, -0.786033, 2.16158 )
 
 [connection signal="input_event" from="MouseRayArea" to="MouseRayArea" method="_on_MouseRayArea_input_event"]
 [connection signal="body_entered" from="PruneArea" to="PruneArea" method="_on_PruneArea_body_entered"]

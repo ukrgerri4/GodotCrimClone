@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Tests/ForceField/force_field.shader" type="Shader" id=1]
+[ext_resource path="res://Tests/ForceField/hexagon_grid.png" type="Texture" id=2]
+
+[sub_resource type="SphereMesh" id=1]
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 1 )
+shader_param/color = Color( 0.607843, 0.219608, 1, 1 )
+shader_param/fresnel_power = 8.0
+shader_param/edge_intensity = 2.0
+shader_param/fill_amount = 0.1
+shader_param/pulsing_strength = 0.25
+shader_param/pulsing_speed = 1.0
+shader_param/scanline_period = 0.5
+shader_param/scanline_width = 0.1
+shader_param/scanline_intensity = 0.35
+shader_param/pattern_scroll_speed = 0.025
+shader_param/pattern_uv_offset = Vector2( 6, 3 )
+shader_param/pattern_texture = ExtResource( 2 )
+
+[node name="ForceField" type="MeshInstance"]
+mesh = SubResource( 1 )
+material/0 = SubResource( 2 )
