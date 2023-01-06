@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://Scripts/Draw.cs" type="Script" id=1]
 [ext_resource path="res://Scripts/TopCamera.cs" type="Script" id=2]
@@ -10,6 +10,8 @@
 [ext_resource path="res://Scripts/MouseRayArea.cs" type="Script" id=8]
 [ext_resource path="res://Scenes/Components/SpiderRock/SpiderRock.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Tests/ForceField/ForceField.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Tests/Water/Water.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Tests/Water/Panel.tscn" type="PackedScene" id=12]
 
 [sub_resource type="ProceduralSky" id=9]
 
@@ -121,10 +123,8 @@ transform = Transform( 10, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0, 0 )
 mesh = SubResource( 6 )
 
 [node name="TopCamera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 100, 100 )
-fov = 20.0
+transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 20, 20 )
 size = 25.0
-far = 200.0
 script = ExtResource( 2 )
 
 [node name="OrthogonalCamera" type="Camera" parent="."]
@@ -176,6 +176,15 @@ gui_disable_input = true
 
 [node name="ForceField" parent="." instance=ExtResource( 10 )]
 transform = Transform( 4.02319, 0, 0, 0, 4.02319, 0, 0, 0, 4.02319, 13.4641, -0.786033, 2.16158 )
+
+[node name="Ocean" parent="." instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, -0.085556, -0.996333, 0, 0.996333, -0.085556, -69.4195, 95.0463, 130.545 )
+
+[node name="Panel" parent="." instance=ExtResource( 12 )]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_top = -375.0
+margin_bottom = -82.0
 
 [connection signal="input_event" from="MouseRayArea" to="MouseRayArea" method="_on_MouseRayArea_input_event"]
 [connection signal="body_entered" from="PruneArea" to="PruneArea" method="_on_PruneArea_body_entered"]

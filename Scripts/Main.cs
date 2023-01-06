@@ -76,7 +76,8 @@ public class Main : Spatial
   private void AddSphere() // TMP
   {
     var zombie = _zombieTemplate.Instance<KinematicBody>();
-    float angle = GD.Randf() * Mathf.Pi * 2;
+    var random = GD.Randf();
+    float angle = random * Mathf.Pi * 2;
     zombie.Translation = new Vector3(Mathf.Cos(angle) * 75, 1f, Mathf.Sin(angle) * 75);
     AddChild(zombie);
   }

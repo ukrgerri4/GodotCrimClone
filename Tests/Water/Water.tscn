@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Tests/Water/Water.gd" type="Script" id=1]
+[ext_resource path="res://Tests/Water/OceanShader.tres" type="Material" id=2]
+
+[node name="Ocean" type="ImmediateGeometry"]
+transform = Transform( 1, 0, 0, 0, -0.085556, -0.996333, 0, 0.996333, -0.085556, 0, 0, 0 )
+material_override = ExtResource( 2 )
+script = ExtResource( 1 )
